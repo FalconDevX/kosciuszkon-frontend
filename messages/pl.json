@@ -49,6 +49,12 @@
     "recommendedTitle": "Polecane artykuły",
     "recommendedSubtitle": "Wybrane tematy do lektury w Kluczowych pojęciach.",
     "readArticle": "Czytaj artykuł",
-    "greetingHello": "Witaj,"
+    "greetingHello": "Witaj,",
+    "settings": "Ustawienia"
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "subtitle": "Zarządzaj kontem i preferencjami. Więcej opcji wkrótce.",
+    "backToDashboard": "Wróć do panelu"
   }
 }

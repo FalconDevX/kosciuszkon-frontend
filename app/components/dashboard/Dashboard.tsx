@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, BookOpen, ClipboardList } from "lucide-react";
+import { ArrowRight, BookOpen, ClipboardList, Settings } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
 import { getStoredUserId } from "@/lib/auth-storage";
 import { DASHBOARD_RECOMMENDED_WIKI_IDS } from "@/lib/dashboard-recommended-articles";
@@ -70,12 +70,21 @@ export function Dashboard({ locale, dictionary }: Props) {
                 <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">{d.title}</h1>
                 <p className="mt-3 max-w-2xl text-zinc-300">{d.subtitle}</p>
               </div>
-              {displayUsername ? (
-                <div className="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-950/70 px-4 py-2 text-sm text-zinc-200 shadow-[0_0_0_1px_rgba(59,130,246,0.12)]">
-                  <span className="text-zinc-300">{d.greetingHello}</span>{" "}
-                  <span className="font-medium text-blue-200">{displayUsername}</span>
-                </div>
-              ) : null}
+              <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
+                {displayUsername ? (
+                  <div className="rounded-full border border-zinc-700/90 bg-zinc-950/70 px-4 py-2 text-sm text-zinc-200 shadow-[0_0_0_1px_rgba(59,130,246,0.12)]">
+                    <span className="text-zinc-300">{d.greetingHello}</span>{" "}
+                    <span className="font-medium text-blue-200">{displayUsername}</span>
+                  </div>
+                ) : null}
+                <Link
+                  href={`/${locale}/settings`}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-950 px-4 text-sm font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-50"
+                >
+                  <Settings className="size-4 text-zinc-400" aria-hidden />
+                  {d.settings}
+                </Link>
+              </div>
             </div>
           </motion.header>
 

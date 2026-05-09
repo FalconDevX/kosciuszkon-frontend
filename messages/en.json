@@ -49,6 +49,12 @@
     "recommendedTitle": "Recommended articles",
     "recommendedSubtitle": "Hand-picked topics to read next in Key Concepts.",
     "readArticle": "Read article",
-    "greetingHello": "Hello,"
+    "greetingHello": "Hello,",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and preferences here. More options coming soon.",
+    "backToDashboard": "Back to dashboard"
   }
 }
