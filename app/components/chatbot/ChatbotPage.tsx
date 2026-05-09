@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  type ChangeEvent,
-  FormEvent,
-  Fragment,
-  type ReactNode,
-  useRef,
-  useState,
-} from "react";
+import { type ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Paperclip, Send, X } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
+import { AssistantMarkdown } from "@/app/components/chatbot/AssistantMarkdown";
 import { Button } from "@/components/ui/button";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
@@ -41,45 +35,6 @@ function AssistantTyping() {
       ))}
     </span>
   );
-}
-
-/** Highlights `Risk: LOW|MEDIUM|HIGH|CRITICAL|UNKNOWN` (case-insensitive) in assistant text. */
-const RISK_LEVEL_BADGE: Record<string, string> = {
-  low: "rounded px-1.5 py-0.5 font-semibold uppercase tracking-wide bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/35",
-  medium:
-    "rounded px-1.5 py-0.5 font-semibold uppercase tracking-wide bg-amber-500/15 text-amber-200 ring-1 ring-amber-500/40",
-  high: "rounded px-1.5 py-0.5 font-semibold uppercase tracking-wide bg-orange-500/15 text-orange-300 ring-1 ring-orange-500/40",
-  critical:
-    "rounded px-1.5 py-0.5 font-semibold uppercase tracking-wide bg-red-500/15 text-red-300 ring-1 ring-red-500/45",
-  unknown:
-    "rounded px-1.5 py-0.5 font-semibold uppercase tracking-wide bg-zinc-500/20 text-zinc-300 ring-1 ring-zinc-500/40",
-};
-
-function RiskHighlightedContent({ text }: { text: string }) {
-  const re =
-    /(\*{0,2}?(?:risk|ryzyko)(?:\s+level|\s+poziom)?\*{0,2}?\s*:\s*\*{0,2}?)(low|medium|high|critical|unknown)\b\*{0,2}?/gi;
-  const parts: ReactNode[] = [];
-  let last = 0;
-  let match: RegExpExecArray | null;
-  let i = 0;
-  while ((match = re.exec(text)) !== null) {
-    if (match.index > last) {
-      parts.push(text.slice(last, match.index));
-    }
-    const level = match[2].toLowerCase();
-    const badgeClass = RISK_LEVEL_BADGE[level] ?? RISK_LEVEL_BADGE.unknown;
-    parts.push(
-      <Fragment key={`r-${i++}`}>
-        {match[1].replace(/\*/g, "")}
-        <span className={badgeClass}>{match[2].toUpperCase()}</span>
-      </Fragment>,
-    );
-    last = match.index + match[0].length;
-  }
-  if (last < text.length) {
-    parts.push(text.slice(last));
-  }
-  return parts.length ? parts : text;
 }
 
 export function ChatbotPage({ locale, dictionary }: Props) {
@@ -206,7 +161,7 @@ export function ChatbotPage({ locale, dictionary }: Props) {
               </div>
             </div>
           ) : (
-            <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+            <div className="chatbot-scrollbar flex-1 space-y-3 overflow-y-auto px-4 py-4">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -225,9 +180,11 @@ export function ChatbotPage({ locale, dictionary }: Props) {
                   {message.role === "assistant" && message.content === "" ? (
                     <AssistantTyping />
                   ) : message.content ? (
-                    <div className="whitespace-pre-wrap">
-                      <RiskHighlightedContent text={message.content} />
-                    </div>
+                    message.role === "assistant" ? (
+                      <AssistantMarkdown content={message.content} />
+                    ) : (
+                      <div className="whitespace-pre-wrap">{message.content}</div>
+                    )
                   ) : null}
                   {message.model ? (
                     <div className="mt-2 border-t border-zinc-700/80 pt-2 text-[11px] text-zinc-500">
