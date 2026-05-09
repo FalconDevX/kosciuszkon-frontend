@@ -7,7 +7,6 @@ import { AssistantMarkdown } from "@/app/components/chatbot/AssistantMarkdown";
 import { Button } from "@/components/ui/button";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
-import { API_BASE_URL, getApiErrorMessage } from "@/lib/api";
 import { postAiChat } from "@/services/api/ai-chat-api";
 
 type Props = {
@@ -87,35 +86,23 @@ export function ChatbotPage({ locale, dictionary }: Props) {
         ? "Nie udało się połączyć z serwerem. Sprawdź połączenie."
         : "Could not reach the server. Check your connection.";
 
-    const uploadErrorPrefix =
-      locale === "pl" ? "Nie udało się wysłać pliku." : "Could not upload the file.";
-
     try {
       let messageForModel = text;
-      if (file) {
-        const formData = new FormData();
-        formData.set("file", file);
-        const uploadResponse = await fetch(`${API_BASE_URL}/files/upload`, {
-          method: "POST",
-          body: formData,
-        });
-        if (!uploadResponse.ok) {
-          const detail = await getApiErrorMessage(uploadResponse);
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === assistantId
-                ? { ...m, content: `${uploadErrorPrefix}\n\n${detail}` }
-                : m,
-            ),
-          );
-          return;
-        }
-        if (!messageForModel) {
-          messageForModel = fileOnlyMessage;
-        }
+      if (file && !messageForModel) {
+        messageForModel = fileOnlyMessage;
       }
 
-      const { response: reply, model } = await postAiChat(messageForModel);
+      const history = messages
+        .filter(
+          (m): m is Message & { content: string } =>
+            (m.role === "user" || m.role === "assistant") && Boolean(m.content?.trim()),
+        )
+        .map((m) => ({ role: m.role, content: m.content }));
+
+      const { response: reply, model } = await postAiChat(messageForModel, {
+        file,
+        history,
+      });
       setMessages((prev) =>
         prev.map((m) => (m.id === assistantId ? { ...m, content: reply, model } : m)),
       );
