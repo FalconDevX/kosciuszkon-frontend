@@ -138,6 +138,33 @@
   }
 }
 
+@keyframes cyber-shine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.cyber-gloss {
+  background-image: linear-gradient(
+    110deg,
+    #60a5fa 0%,
+    #93c5fd 40%,
+    #ffffff 50%,
+    #93c5fd 60%,
+    #60a5fa 100%
+  );
+  background-size: 260% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  will-change: background-position;
+  animation: cyber-shine 6.8s linear infinite;
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.2);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

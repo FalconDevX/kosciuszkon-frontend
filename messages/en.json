@@ -4,9 +4,10 @@
     "language": "Language",
     "english": "English",
     "polish": "Polish",
-    "chatbotAi": "Chatbot / AI Model",
-    "wikiConcepts": "Wiki / Key Concepts",
-    "interactiveTests": "Interactive Tests"
+    "chatbotAi": "Chatbot",
+    "wikiConcepts": "Key Concepts",
+    "interactiveTests": "Interactive Tests",
+    "quiz": "Quiz"
   },
   "auth": {
     "panelTag": "SafeClick Panel",
@@ -28,6 +29,7 @@
     "facebook": "Facebook"
   },
   "home": {
+    "mainHeadline": "Master cybersecurity and stay one step ahead of threats",
     "whatWeDoTitle": "What this platform does",
     "logoTagline": "Learn faster. Stay safer. Click with confidence.",
     "featureHighlights": [

@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import type { Dictionary } from "@/i18n/types";
+import { API_BASE_URL, getApiErrorMessage } from "@/lib/api";
 
 const inputClassName =
   "h-10 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-500 focus:border-blue-500/70";
@@ -10,22 +12,82 @@ type LoginProps = {
 };
 
 export function Login({ dictionary }: LoginProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(
+    null,
+  );
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus(null);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        const message = await getApiErrorMessage(response);
+        setStatus({ type: "error", message });
+        return;
+      }
+
+      setStatus({ type: "success", message: "Login successful." });
+    } catch {
+      setStatus({
+        type: "error",
+        message: "Could not connect to API. Check network or backend availability.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
-      <form className="mt-5 space-y-3">
+      <form className="mt-5 space-y-3" onSubmit={onSubmit}>
         <input
           type="email"
           placeholder={dictionary.auth.email}
           className={inputClassName}
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
         />
         <input
           type="password"
           placeholder={dictionary.auth.password}
           className={inputClassName}
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          required
         />
-        <Button className="mt-1 h-10 w-full cursor-pointer bg-blue-500 text-zinc-950 hover:bg-blue-400">
-          {dictionary.auth.signIn}
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="mt-1 h-10 w-full cursor-pointer bg-blue-500 text-zinc-950 hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isSubmitting ? "Signing in..." : dictionary.auth.signIn}
         </Button>
+        {status ? (
+          <p
+            className={`text-xs ${
+              status.type === "success" ? "text-emerald-300" : "text-rose-300"
+            }`}
+          >
+            {status.message}
+          </p>
+        ) : null}
       </form>
       <div className="my-4 flex items-center gap-3">
         <div className="h-px flex-1 bg-zinc-800" />

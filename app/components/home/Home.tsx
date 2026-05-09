@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { AuthPanel } from "@/app/components/auth/AuthPanel";
@@ -14,13 +15,70 @@ type HomeProps = {
 
 export function Home({ locale, dictionary }: HomeProps) {
   const featureHighlights = dictionary.home.featureHighlights.slice(0, 4);
+  const headline = dictionary.home.mainHeadline;
+  const [typedLength, setTypedLength] = useState(0);
+
+  useEffect(() => {
+    setTypedLength(0);
+
+    const typingInterval = window.setInterval(() => {
+      setTypedLength((current) => {
+        if (current >= headline.length) {
+          window.clearInterval(typingInterval);
+          return current;
+        }
+        return current + 1;
+      });
+    }, 32);
+
+    return () => window.clearInterval(typingInterval);
+  }, [headline]);
+
+  const isTypingFinished = typedLength >= headline.length;
+  const typingHeadline = headline.slice(0, typedLength);
+
+  const highlightedHeadline = (() => {
+    const pattern =
+      locale === "pl"
+        ? /(cyberbezpieczeństwa|cyberbezpieczenstwa)/i
+        : /(cybersecurity)/i;
+
+    const match = headline.match(pattern);
+    if (!match || match.index === undefined) {
+      return headline;
+    }
+
+    const start = match.index;
+    const end = start + match[0].length;
+
+    return (
+      <>
+        {headline.slice(0, start)}
+        <span className="cyber-gloss">{headline.slice(start, end)}</span>
+        {headline.slice(end)}
+      </>
+    );
+  })();
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100">
       <Navbar locale={locale} dictionary={dictionary} />
-      <section className="relative min-h-[calc(100vh-4rem)] px-6 py-10 md:px-10">
+      <section className="relative h-[calc(100vh-4rem)] overflow-hidden px-6 py-6 md:px-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_48%,rgba(59,130,246,0.16),transparent_32%)]" />
-        <div className="relative mx-auto flex min-h-[calc(100vh-9rem)] w-full max-w-[1280px] flex-col items-start justify-center gap-6 lg:flex-row lg:items-center xl:gap-8">
+        <div className="mt-4 flex w-full items-center justify-center md:mt-6">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
+            className="mb-2 w-full text-center font-mono text-2xl font-bold tracking-tight text-zinc-100 md:text-4xl"
+          >
+            {isTypingFinished ? highlightedHeadline : typingHeadline}
+            {!isTypingFinished ? (
+              <span className="ml-1 inline-block h-[1em] w-[2px] animate-pulse bg-zinc-100 align-middle" />
+            ) : null}
+          </motion.h1>
+        </div>
+        <div className="relative mx-auto flex h-[calc(100vh-10rem)] w-full max-w-[1280px] flex-col items-start justify-center gap-4 lg:-translate-y-10 lg:flex-row lg:items-center xl:gap-8">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
@@ -30,23 +88,23 @@ export function Home({ locale, dictionary }: HomeProps) {
             <Image
               src="/safe_click_dark_small.png"
               alt="SafeClick shield logo"
-              width={280}
-              height={280}
-              className="h-auto w-full max-w-[260px] self-center will-change-transform"
+              width={240}
+              height={240}
+              className="h-auto w-full max-w-[210px] self-center will-change-transform"
               style={{ animation: "float-soft-a 6.6s ease-in-out infinite" }}
               priority
             />
             <Image
               src="/safe_click_dark_title.png"
               alt="SafeClick title logo"
-              width={720}
-              height={160}
-              className="h-auto w-full max-w-[520px] will-change-transform"
+              width={640}
+              height={142}
+              className="h-auto w-full max-w-[440px] will-change-transform"
               style={{ animation: "float-soft-b 7.2s ease-in-out infinite" }}
               priority
             />
             <div className="max-w-[560px] text-left">
-              <ul className="mt-1 space-y-2 text-sm text-zinc-300">
+              <ul className="mt-1 space-y-2 text-base text-zinc-300">
                 {featureHighlights.map((feature, index) => (
                   <motion.li
                     key={feature}

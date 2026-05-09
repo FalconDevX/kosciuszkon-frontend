@@ -3,37 +3,39 @@
     "secureAccess": "Bezpieczny dostep",
     "language": "Jezyk",
     "english": "Angielski",
-    "polish": "Polski",
-    "chatbotAi": "Chatbot / Model AI",
-    "wikiConcepts": "Wiki / Najwazniejsze pojecia",
-    "interactiveTests": "Testy interaktywne"
+    "polish": "Polski", 
+    "chatbotAi": "Chatbot",
+    "wikiConcepts": "Kluczowe pojecia",
+    "interactiveTests": "Interaktywne testy",
+    "quiz": "Quiz"
   },
   "auth": {
     "panelTag": "Panel SafeClick",
     "loginTitle": "Witaj ponownie",
     "registerTitle": "Utworz konto",
-    "loginSubtitle": "Zaloguj sie do swojego bezpiecznego workspace.",
-    "registerSubtitle": "Zarejestruj sie i zacznij chronic swoj workspace.",
+    "loginSubtitle": "Zaloguj się do swojego bezpiecznego workspace.",
+    "registerSubtitle": "Zarejestruj się i zacznij chronić swoj workspace.",
     "loginTab": "Logowanie",
     "registerTab": "Rejestracja",
     "continueWithoutRegister": "Kontynuuj bez rejestracji",
-    "username": "Nazwa uzytkownika",
+    "username": "Nazwa użytkownika",
     "email": "Email",
     "password": "Haslo",
     "confirmPassword": "Potwierdz haslo",
-    "signIn": "Zaloguj sie",
+    "signIn": "Zaloguj się",
     "createAccount": "Utworz konto",
     "continueWith": "lub kontynuuj przez",
     "google": "Google",
     "facebook": "Facebook"
   },
   "home": {
+    "mainHeadline": "Naucz się cyberbezpieczeństwa i nie daj się oszukać",
     "whatWeDoTitle": "Co robi ta platforma",
-    "logoTagline": "Ucz sie szybciej. Badz bezpieczniej. Klikaj swiadomie.",
+    "logoTagline": "Ucz się szybciej. Bądź bezpieczniej. Klikaj świadomie.",
     "featureHighlights": [
       "Interaktywne quizy cyberbezpieczenstwa",
       "Symulacje phishingu oparte na realnych scenariuszach",
-      "Spersonalizowane sciezki nauki",
+      "Personalizowane ścieżki nauki",
       "Natychmiastowy feedback i analiza"
     ]
   }

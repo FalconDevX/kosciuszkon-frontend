@@ -18,6 +18,7 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
     { href: "/chatbot-ai", label: dictionary.navbar.chatbotAi },
     { href: "/wiki-concepts", label: dictionary.navbar.wikiConcepts },
     { href: "/interactive-tests", label: dictionary.navbar.interactiveTests },
+    { href: "/quiz", label: dictionary.navbar.quiz },
   ];
 
   const languageOptions: Array<{ code: Locale; flagSrc: string; label: string }> = [
@@ -27,7 +28,7 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
 
   return (
     <header className="flex h-16 w-full items-center justify-between border-b border-zinc-800/90 bg-zinc-900/70 px-8 backdrop-blur">
-      <div className="flex items-center gap-3">
+      <Link href={`/${locale}`} className="flex items-center gap-3">
         <Image
           src="/safe_click_dark_small.png"
           alt="SafeClick shield logo"
@@ -44,7 +45,7 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
           className="h-8 w-auto"
           priority
         />
-      </div>
+      </Link>
       <nav className="hidden items-center gap-1 rounded-md border border-zinc-800 bg-zinc-900/70 p-1 md:flex">
         {navigationItems.map((item) => {
           const isActive = pathWithoutLocale === item.href;
@@ -54,8 +55,8 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
               href={`/${locale}${item.href}`}
               className={`rounded px-3 py-1.5 text-sm transition-colors ${
                 isActive
-                  ? "bg-blue-500/20 text-zinc-100"
-                  : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+                  ? "bg-blue-500/28 text-blue-50"
+                  : "text-zinc-300 hover:bg-blue-500/16 hover:text-blue-100"
               }`}
             >
               {item.label}
@@ -64,7 +65,7 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
         })}
       </nav>
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1 rounded-md border border-zinc-800 bg-zinc-900/90 p-1">
+        <div className="flex items-center gap-1 rounded-md border border-blue-500/35 bg-blue-950/35 p-1 shadow-[0_0_0_1px_rgba(59,130,246,0.15)]">
           {languageOptions.map((option) => {
             const isActive = option.code === locale;
             return (
@@ -73,8 +74,8 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
                 href={`/${option.code}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`}
                 className={`flex cursor-pointer items-center gap-2 rounded px-2.5 py-1.5 text-sm transition-colors ${
                   isActive
-                    ? "bg-blue-500/20 text-zinc-100"
-                    : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+                    ? "bg-blue-500/35 text-blue-50"
+                    : "text-blue-200/80 hover:bg-blue-500/20 hover:text-blue-50"
                 }`}
               >
                 <Image
