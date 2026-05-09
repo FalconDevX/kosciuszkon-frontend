@@ -1,0 +1,40 @@
+{
+  "navbar": {
+    "secureAccess": "Bezpieczny dostep",
+    "language": "Jezyk",
+    "english": "Angielski",
+    "polish": "Polski",
+    "chatbotAi": "Chatbot / Model AI",
+    "wikiConcepts": "Wiki / Najwazniejsze pojecia",
+    "interactiveTests": "Testy interaktywne"
+  },
+  "auth": {
+    "panelTag": "Panel SafeClick",
+    "loginTitle": "Witaj ponownie",
+    "registerTitle": "Utworz konto",
+    "loginSubtitle": "Zaloguj sie do swojego bezpiecznego workspace.",
+    "registerSubtitle": "Zarejestruj sie i zacznij chronic swoj workspace.",
+    "loginTab": "Logowanie",
+    "registerTab": "Rejestracja",
+    "continueWithoutRegister": "Kontynuuj bez rejestracji",
+    "username": "Nazwa uzytkownika",
+    "email": "Email",
+    "password": "Haslo",
+    "confirmPassword": "Potwierdz haslo",
+    "signIn": "Zaloguj sie",
+    "createAccount": "Utworz konto",
+    "continueWith": "lub kontynuuj przez",
+    "google": "Google",
+    "facebook": "Facebook"
+  },
+  "home": {
+    "whatWeDoTitle": "Co robi ta platforma",
+    "logoTagline": "Ucz sie szybciej. Badz bezpieczniej. Klikaj swiadomie.",
+    "featureHighlights": [
+      "Interaktywne quizy cyberbezpieczenstwa",
+      "Symulacje phishingu oparte na realnych scenariuszach",
+      "Spersonalizowane sciezki nauki",
+      "Natychmiastowy feedback i analiza"
+    ]
+  }
+}

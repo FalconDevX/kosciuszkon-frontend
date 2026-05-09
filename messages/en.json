@@ -1,0 +1,40 @@
+{
+  "navbar": {
+    "secureAccess": "Secure access",
+    "language": "Language",
+    "english": "English",
+    "polish": "Polish",
+    "chatbotAi": "Chatbot / AI Model",
+    "wikiConcepts": "Wiki / Key Concepts",
+    "interactiveTests": "Interactive Tests"
+  },
+  "auth": {
+    "panelTag": "SafeClick Panel",
+    "loginTitle": "Welcome back",
+    "registerTitle": "Create account",
+    "loginSubtitle": "Sign in to your secure workspace.",
+    "registerSubtitle": "Register and start protecting your workspace.",
+    "loginTab": "Login",
+    "registerTab": "Register",
+    "continueWithoutRegister": "Continue without register",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "continueWith": "or continue with",
+    "google": "Google",
+    "facebook": "Facebook"
+  },
+  "home": {
+    "whatWeDoTitle": "What this platform does",
+    "logoTagline": "Learn faster. Stay safer. Click with confidence.",
+    "featureHighlights": [
+      "Interactive cybersecurity quizzes",
+      "Real-world phishing simulations",
+      "Personalized learning paths",
+      "Instant feedback and analysis"
+    ]
+  }
+}
