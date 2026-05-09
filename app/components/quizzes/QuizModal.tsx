@@ -4,16 +4,20 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { Dictionary } from "@/i18n/types";
 import type { QuizQuestion } from "@/types/quiz";
+
+type ModalCopy = Dictionary["quiz"]["modal"];
 
 type Props = {
   open: boolean;
   questions: QuizQuestion[];
   onClose: () => void;
   onRestart: () => void;
+  modal: ModalCopy;
 };
 
-export function QuizModal({ open, questions, onClose, onRestart }: Props) {
+export function QuizModal({ open, questions, onClose, onRestart, modal }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showResults, setShowResults] = useState(false);
@@ -55,6 +59,15 @@ export function QuizModal({ open, questions, onClose, onRestart }: Props) {
     onRestart();
   };
 
+  const questionProgress = modal.questionProgress
+    .replace("{{current}}", String(currentIndex + 1))
+    .replace("{{total}}", String(questions.length));
+
+  const scoreLine = modal.scoreLine
+    .replace("{{score}}", String(score))
+    .replace("{{total}}", String(questions.length))
+    .replace("{{percent}}", String(percentage));
+
   return (
     <AnimatePresence>
       {open ? (
@@ -74,17 +87,15 @@ export function QuizModal({ open, questions, onClose, onRestart }: Props) {
               type="button"
               onClick={onClose}
               className="absolute right-4 top-4 inline-flex cursor-pointer items-center justify-center rounded-md border border-zinc-700 bg-zinc-900 p-1.5 text-zinc-300 transition hover:bg-zinc-800 hover:text-zinc-100"
-              aria-label="Close quiz"
+              aria-label={modal.closeAria}
             >
               <X className="size-4" />
             </button>
             {!showResults ? (
               <>
                 <div className="mb-4 flex items-center justify-between pr-10">
-                  <h3 className="text-xl font-semibold">Quiz Session</h3>
-                  <p className="text-sm text-zinc-400 mr-2">
-                    Question {currentIndex + 1}/{questions.length}
-                  </p>
+                  <h3 className="text-xl font-semibold">{modal.sessionTitle}</h3>
+                  <p className="mr-2 text-sm text-zinc-400">{questionProgress}</p>
                 </div>
                 <div className="mb-5 h-2 rounded-full bg-zinc-800">
                   <div
@@ -134,7 +145,7 @@ export function QuizModal({ open, questions, onClose, onRestart }: Props) {
                     disabled={currentIndex === 0}
                     className="cursor-pointer border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800 hover:text-zinc-100"
                   >
-                    Previous
+                    {modal.previous}
                   </Button>
 
                   {isLast ? (
@@ -142,24 +153,22 @@ export function QuizModal({ open, questions, onClose, onRestart }: Props) {
                       onClick={() => setShowResults(true)}
                       className="cursor-pointer bg-blue-500/90 text-zinc-100 hover:bg-blue-500"
                     >
-                      Finish Quiz
+                      {modal.finishQuiz}
                     </Button>
                   ) : (
                     <Button
                       onClick={() => setCurrentIndex((q) => Math.min(q + 1, questions.length - 1))}
                       className="cursor-pointer bg-blue-500/90 text-zinc-100 hover:bg-blue-500"
                     >
-                      Next
+                      {modal.next}
                     </Button>
                   )}
                 </div>
               </>
             ) : (
               <div className="space-y-4">
-                <h3 className="text-2xl font-semibold">Results</h3>
-                <p className="text-zinc-300">
-                  Score: {score}/{questions.length} ({percentage}%)
-                </p>
+                <h3 className="text-2xl font-semibold">{modal.resultsTitle}</h3>
+                <p className="text-zinc-300">{scoreLine}</p>
                 <div className="space-y-2">
                   {questions.map((question) => {
                     const selectedKey = answers[question.id];
@@ -182,11 +191,12 @@ export function QuizModal({ open, questions, onClose, onRestart }: Props) {
                       >
                         <p className="font-medium">{question.question}</p>
                         <p className="mt-1 text-zinc-300">
-                          Your answer: {selectedOption?.text ?? "No answer selected"}
+                          {modal.yourAnswer}{" "}
+                          {selectedOption?.text ?? modal.noAnswerSelected}
                         </p>
                         {!isCorrect ? (
                           <p className="text-zinc-200">
-                            Correct answer: {correctOption?.text ?? "Unavailable"}
+                            {modal.correctAnswer} {correctOption?.text ?? modal.unavailable}
                           </p>
                         ) : null}
                       </div>
@@ -198,14 +208,14 @@ export function QuizModal({ open, questions, onClose, onRestart }: Props) {
                     onClick={restart}
                     className="cursor-pointer bg-blue-500/90 text-zinc-100 hover:bg-blue-500"
                   >
-                    Restart Quiz
+                    {modal.restartQuiz}
                   </Button>
                   <Button
                     variant="outline"
                     onClick={onClose}
                     className="cursor-pointer border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800 hover:text-zinc-100"
                   >
-                    Close
+                    {modal.close}
                   </Button>
                 </div>
               </div>

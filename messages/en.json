@@ -77,5 +77,72 @@
     "dangerMedium": "Medium",
     "dangerHigh": "High",
     "dangerCritical": "Critical"
+  },
+  "quiz": {
+    "pageTitle": "Cybersecurity Quizzes",
+    "pageSubtitle": "Test your skills, improve awareness, and learn to recognize real threats.",
+    "randomQuiz": "Random Quiz",
+    "dailyChallenge": "Daily Challenge",
+    "aiGeneratedQuiz": "AI Generated Quiz",
+    "loading": "Loading quiz questions...",
+    "popularTitle": "Popular Quizzes",
+    "startQuiz": "Start Quiz",
+    "playQuizAria": "Start quiz",
+    "questionsCount": "{{count}} questions",
+    "popularMeta": "{{questions}} questions • {{time}}",
+    "timeMin": "{{count}} min",
+    "difficulties": {
+      "beginner": "Beginner",
+      "medium": "Medium",
+      "advanced": "Advanced",
+      "mixed": "Mixed"
+    },
+    "categories": [
+      {
+        "title": "Phishing",
+        "description": "Fake emails, suspicious links, and social engineering."
+      },
+      {
+        "title": "Password Security",
+        "description": "Strong passwords, MFA, and credential leak defense."
+      },
+      {
+        "title": "Web Security",
+        "description": "Unsafe websites, browser attacks, and downloads."
+      },
+      {
+        "title": "Workplace Security",
+        "description": "Corporate threats, insider risk, and device safety."
+      },
+      {
+        "title": "AI & Modern Threats",
+        "description": "Deepfakes, AI scams, and modern phishing patterns."
+      },
+      {
+        "title": "Beginner / Advanced",
+        "description": "Adaptive starter and advanced challenge sets."
+      }
+    ],
+    "popular": [
+      { "title": "Phishing Detection" },
+      { "title": "Password Audit Sprint" },
+      { "title": "Browser Risk Radar" }
+    ],
+    "modal": {
+      "closeAria": "Close quiz",
+      "sessionTitle": "Quiz Session",
+      "questionProgress": "Question {{current}}/{{total}}",
+      "previous": "Previous",
+      "next": "Next",
+      "finishQuiz": "Finish Quiz",
+      "resultsTitle": "Results",
+      "scoreLine": "Score: {{score}}/{{total}} ({{percent}}%)",
+      "yourAnswer": "Your answer:",
+      "correctAnswer": "Correct answer:",
+      "noAnswerSelected": "No answer selected",
+      "unavailable": "Unavailable",
+      "restartQuiz": "Restart Quiz",
+      "close": "Close"
+    }
   }
 }

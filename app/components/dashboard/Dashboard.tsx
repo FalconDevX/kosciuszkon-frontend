@@ -12,7 +12,7 @@ import { fetchUsernameByUserId } from "@/lib/user-profile";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import type { WikiArticle } from "@/types/wiki";
-import { categoryMetadata } from "@/app/components/quizzes/quiz-metadata";
+import { QUIZ_CATEGORY_COUNT } from "@/app/components/quizzes/quiz-metadata";
 import { getWikiArticles } from "@/services/wikiApi";
 
 type Props = {
@@ -47,7 +47,7 @@ export function Dashboard({ locale, dictionary }: Props) {
   ).filter((a): a is WikiArticle => a != null);
 
   const quizBody = d.quizCardBody
-    .replace("{{count}}", String(categoryMetadata.length))
+    .replace("{{count}}", String(QUIZ_CATEGORY_COUNT))
     .replace("{{questions}}", String(DEFAULT_QUIZ_SESSION_QUESTIONS))
     .replace("{{minutes}}", String(DEFAULT_QUIZ_SESSION_QUESTIONS));
 

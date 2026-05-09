@@ -7,71 +7,83 @@ import {
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
+import type { Dictionary } from "@/i18n/types";
 import type { QuizCategory, QuizDifficulty } from "@/types/quiz";
 
 export type CategoryMeta = {
   category: QuizCategory;
-  title: string;
   icon: LucideIcon;
-  description: string;
   difficulty: QuizDifficulty;
   quizCount: number;
+  estimatedMinutes: number;
+  title: string;
+  description: string;
   estimatedTime: string;
 };
 
-export const categoryMetadata: CategoryMeta[] = [
+type LayoutRow = {
+  category: QuizCategory;
+  icon: LucideIcon;
+  difficulty: QuizDifficulty;
+  quizCount: number;
+  estimatedMinutes: number;
+};
+
+const quizCategoryLayout: LayoutRow[] = [
   {
     category: "Phishing",
-    title: "Phishing",
     icon: MailWarning,
-    description: "Fake emails, suspicious links, and social engineering.",
     difficulty: "Medium",
     quizCount: 5,
-    estimatedTime: "5 min",
+    estimatedMinutes: 5,
   },
   {
     category: "Password Security",
-    title: "Password Security",
     icon: KeyRound,
-    description: "Strong passwords, MFA, and credential leak defense.",
     difficulty: "Beginner",
     quizCount: 5,
-    estimatedTime: "5 min",
+    estimatedMinutes: 5,
   },
   {
     category: "Web Security",
-    title: "Web Security",
     icon: Globe,
-    description: "Unsafe websites, browser attacks, and downloads.",
     difficulty: "Medium",
     quizCount: 5,
-    estimatedTime: "5 min",
+    estimatedMinutes: 5,
   },
   {
     category: "Workplace Security",
-    title: "Workplace Security",
     icon: Building,
-    description: "Corporate threats, insider risk, and device safety.",
     difficulty: "Advanced",
     quizCount: 5,
-    estimatedTime: "5 min",
+    estimatedMinutes: 5,
   },
   {
     category: "AI Threats",
-    title: "AI & Modern Threats",
     icon: Bot,
-    description: "Deepfakes, AI scams, and modern phishing patterns.",
     difficulty: "Advanced",
     quizCount: 5,
-    estimatedTime: "5 min",
+    estimatedMinutes: 5,
   },
   {
     category: "Password Security",
-    title: "Beginner / Advanced",
     icon: ShieldCheck,
-    description: "Adaptive starter and advanced challenge sets.",
     difficulty: "Mixed",
     quizCount: 5,
-    estimatedTime: "5 min",
+    estimatedMinutes: 5,
   },
 ];
+
+export const QUIZ_CATEGORY_COUNT = quizCategoryLayout.length;
+
+export function getQuizCategoryCards(quiz: Dictionary["quiz"]): CategoryMeta[] {
+  return quizCategoryLayout.map((row, index) => {
+    const copy = quiz.categories[index];
+    return {
+      ...row,
+      title: copy.title,
+      description: copy.description,
+      estimatedTime: quiz.timeMin.replace("{{count}}", String(row.estimatedMinutes)),
+    };
+  });
+}

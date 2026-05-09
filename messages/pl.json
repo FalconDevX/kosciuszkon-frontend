@@ -77,5 +77,72 @@
     "dangerMedium": "Średnie",
     "dangerHigh": "Wysokie",
     "dangerCritical": "Krytyczne"
+  },
+  "quiz": {
+    "pageTitle": "Quizy z cyberbezpieczeństwa",
+    "pageSubtitle": "Sprawdź swoje umiejętności, podnieś świadomość i ucz się rozpoznawać realne zagrożenia.",
+    "randomQuiz": "Losowy quiz",
+    "dailyChallenge": "Wyzwanie dnia",
+    "aiGeneratedQuiz": "Quiz generowany przez AI",
+    "loading": "Ładowanie pytań quizu...",
+    "popularTitle": "Popularne quizy",
+    "startQuiz": "Rozpocznij quiz",
+    "playQuizAria": "Rozpocznij quiz",
+    "questionsCount": "{{count}} pytań",
+    "popularMeta": "{{questions}} pytań • {{time}}",
+    "timeMin": "{{count}} min",
+    "difficulties": {
+      "beginner": "Początkujący",
+      "medium": "Średni",
+      "advanced": "Zaawansowany",
+      "mixed": "Mieszany"
+    },
+    "categories": [
+      {
+        "title": "Phishing",
+        "description": "Fałszywe maile, podejrzane linki i inżynieria społeczna."
+      },
+      {
+        "title": "Bezpieczeństwo haseł",
+        "description": "Silne hasła, MFA i obrona przed wyciekami poświadczeń."
+      },
+      {
+        "title": "Bezpieczeństwo WWW",
+        "description": "Niebezpieczne strony, ataki na przeglądarkę i pobieranie plików."
+      },
+      {
+        "title": "Bezpieczeństwo w pracy",
+        "description": "Zagrożenia korporacyjne, ryzyko insidera i bezpieczeństwo urządzeń."
+      },
+      {
+        "title": "AI i współczesne zagrożenia",
+        "description": "Deepfake’i, oszustwa z użyciem AI i nowe wzorce phishingu."
+      },
+      {
+        "title": "Początkujący / zaawansowany",
+        "description": "Adaptacyjne zestawy na start i dla zaawansowanych."
+      }
+    ],
+    "popular": [
+      { "title": "Wykrywanie phishingu" },
+      { "title": "Sprint audytu haseł" },
+      { "title": "Radar ryzyka przeglądarki" }
+    ],
+    "modal": {
+      "closeAria": "Zamknij quiz",
+      "sessionTitle": "Sesja quizu",
+      "questionProgress": "Pytanie {{current}}/{{total}}",
+      "previous": "Wstecz",
+      "next": "Dalej",
+      "finishQuiz": "Zakończ quiz",
+      "resultsTitle": "Wyniki",
+      "scoreLine": "Wynik: {{score}}/{{total}} ({{percent}}%)",
+      "yourAnswer": "Twoja odpowiedź:",
+      "correctAnswer": "Poprawna odpowiedź:",
+      "noAnswerSelected": "Nie wybrano odpowiedzi",
+      "unavailable": "Niedostępne",
+      "restartQuiz": "Quiz od nowa",
+      "close": "Zamknij"
+    }
   }
 }

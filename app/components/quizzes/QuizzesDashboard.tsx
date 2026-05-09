@@ -9,15 +9,19 @@ import {
   buildQuizSessionBestEffort,
   DEFAULT_QUIZ_SESSION_QUESTIONS,
 } from "@/lib/quiz-limits";
+import { quizDifficultyLabel } from "@/lib/quiz-difficulty-label";
 import { quizApi } from "@/services/api/quiz-api";
 import { useQuizSession } from "@/hooks/useQuizSession";
 import type { Dictionary } from "@/i18n/types";
 import type { Locale } from "@/i18n/config";
 import type { QuizCategory } from "@/types/quiz";
+import type { QuizDifficulty } from "@/types/quiz";
 import { CategoryCard } from "./CategoryCard";
 import { QuizCard } from "./QuizCard";
 import { QuizModal } from "./QuizModal";
-import { categoryMetadata } from "./quiz-metadata";
+import { getQuizCategoryCards } from "./quiz-metadata";
+
+const POPULAR_DIFFICULTIES: QuizDifficulty[] = ["Medium", "Beginner", "Advanced"];
 
 type Props = {
   locale: Locale;
@@ -25,32 +29,24 @@ type Props = {
 };
 
 export function QuizzesDashboard({ locale, dictionary }: Props) {
-  const quiz = useQuizSession();
+  const q = dictionary.quiz;
+  const quizSession = useQuizSession();
   const [isLoading, setIsLoading] = useState(false);
 
-  const popularQuizzes = useMemo(
-    () => [
-      {
-        title: "Phishing Detection",
-        difficulty: "Medium" as const,
-        questions: DEFAULT_QUIZ_SESSION_QUESTIONS,
-        estimatedTime: "5 min",
-      },
-      {
-        title: "Password Audit Sprint",
-        difficulty: "Beginner" as const,
-        questions: DEFAULT_QUIZ_SESSION_QUESTIONS,
-        estimatedTime: "5 min",
-      },
-      {
-        title: "Browser Risk Radar",
-        difficulty: "Advanced" as const,
-        questions: DEFAULT_QUIZ_SESSION_QUESTIONS,
-        estimatedTime: "5 min",
-      },
-    ],
-    [],
-  );
+  const categoryCards = useMemo(() => getQuizCategoryCards(q), [q]);
+
+  const popularQuizzes = useMemo(() => {
+    const questions = DEFAULT_QUIZ_SESSION_QUESTIONS;
+    const time = q.timeMin.replace("{{count}}", String(5));
+    return q.popular.map((item, index) => ({
+      title: item.title,
+      difficulty: POPULAR_DIFFICULTIES[index] ?? "Medium",
+      questions,
+      estimatedTime: time,
+      meta: q.popularMeta.replace("{{questions}}", String(questions)).replace("{{time}}", time),
+      difficultyLabel: quizDifficultyLabel(POPULAR_DIFFICULTIES[index] ?? "Medium", q),
+    }));
+  }, [q]);
 
   const loadQuiz = async (
     category?: QuizCategory,
@@ -64,7 +60,7 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
 
       const questions = buildQuizSessionBestEffort(raw, questionCount);
       if (questions?.length) {
-        quiz.start(questions);
+        quizSession.start(questions);
       }
     } catch {
       /* ignore: no banner above quiz grid */
@@ -87,12 +83,8 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl border border-zinc-800/80 bg-zinc-900/55 p-6 backdrop-blur md:p-8"
           >
-            <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
-              Cybersecurity Quizzes
-            </h1>
-            <p className="mt-3 max-w-2xl text-zinc-300">
-              Test your skills, improve awareness, and learn to recognize real threats.
-            </p>
+            <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">{q.pageTitle}</h1>
+            <p className="mt-3 max-w-2xl text-zinc-300">{q.pageSubtitle}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button
                 onClick={() =>
@@ -102,7 +94,7 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
                 className="bg-blue-500/85 text-zinc-100 hover:bg-blue-500"
               >
                 <Dice5 className="size-4" />
-                Random Quiz
+                {q.randomQuiz}
               </Button>
               <Button
                 onClick={() =>
@@ -113,7 +105,7 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
                 className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800"
               >
                 <Flame className="size-4" />
-                Daily Challenge
+                {q.dailyChallenge}
               </Button>
               <Button
                 onClick={() =>
@@ -124,22 +116,28 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
                 className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800"
               >
                 <Brain className="size-4" />
-                AI Generated Quiz
+                {q.aiGeneratedQuiz}
               </Button>
             </div>
           </motion.div>
 
           {isLoading ? (
             <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-sm text-zinc-300">
-              Loading quiz questions...
+              {q.loading}
             </div>
           ) : null}
 
           <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-            {categoryMetadata.map((category) => (
+            {categoryCards.map((category) => (
               <CategoryCard
                 key={`${category.title}-${category.category}`}
                 category={category}
+                difficultyLabel={quizDifficultyLabel(category.difficulty, q)}
+                questionsLabel={q.questionsCount.replace(
+                  "{{count}}",
+                  String(category.quizCount),
+                )}
+                startQuizLabel={q.startQuiz}
                 onStart={() =>
                   loadQuiz(category.category, DEFAULT_QUIZ_SESSION_QUESTIONS)
                 }
@@ -149,15 +147,16 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-xl font-semibold">Popular Quizzes</h2>
+            <h2 className="text-xl font-semibold">{q.popularTitle}</h2>
             <div className="space-y-3">
               {popularQuizzes.map((item) => (
                 <QuizCard
                   key={item.title}
                   title={item.title}
+                  metaLine={item.meta}
                   difficulty={item.difficulty}
-                  questions={item.questions}
-                  estimatedTime={item.estimatedTime}
+                  difficultyLabel={item.difficultyLabel}
+                  playAriaLabel={q.playQuizAria}
                   onPlay={() =>
                     loadQuiz(undefined, DEFAULT_QUIZ_SESSION_QUESTIONS)
                   }
@@ -170,10 +169,11 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
       </section>
 
       <QuizModal
-        open={quiz.isOpen}
-        questions={quiz.questions}
-        onClose={quiz.close}
-        onRestart={quiz.restart}
+        open={quizSession.isOpen}
+        questions={quizSession.questions}
+        onClose={quizSession.close}
+        onRestart={quizSession.restart}
+        modal={q.modal}
       />
     </main>
   );
