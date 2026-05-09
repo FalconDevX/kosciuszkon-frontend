@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
+import { setStoredUserId } from "@/lib/auth-storage";
 import { API_BASE_URL, getApiErrorMessage } from "@/lib/api";
+import { extractUserIdFromAuthResponse } from "@/lib/user-profile";
 
 const inputClassName =
   "h-10 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-500 focus:border-blue-500/70";
@@ -44,6 +46,17 @@ export function Login({ dictionary, locale }: LoginProps) {
         const message = await getApiErrorMessage(response);
         setStatus({ type: "error", message });
         return;
+      }
+
+      let payload: unknown = null;
+      try {
+        payload = await response.json();
+      } catch {
+        /* empty body */
+      }
+      const userId = extractUserIdFromAuthResponse(payload);
+      if (userId) {
+        setStoredUserId(userId);
       }
 
       setStatus({ type: "success", message: "Login successful." });

@@ -48,6 +48,7 @@
     "quizCta": "Open quizzes",
     "recommendedTitle": "Recommended articles",
     "recommendedSubtitle": "Hand-picked topics to read next in Key Concepts.",
-    "readArticle": "Read article"
+    "readArticle": "Read article",
+    "greetingHello": "Hello,"
   }
 }

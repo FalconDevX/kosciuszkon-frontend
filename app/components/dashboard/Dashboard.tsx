@@ -1,11 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, BookOpen, ClipboardList } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
-import { DEFAULT_QUIZ_SESSION_QUESTIONS } from "@/lib/quiz-limits";
+import { getStoredUserId } from "@/lib/auth-storage";
 import { DASHBOARD_RECOMMENDED_WIKI_IDS } from "@/lib/dashboard-recommended-articles";
+import { DEFAULT_QUIZ_SESSION_QUESTIONS } from "@/lib/quiz-limits";
+import { fetchUsernameByUserId } from "@/lib/user-profile";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import type { WikiArticle } from "@/types/wiki";
@@ -19,6 +22,25 @@ type Props = {
 
 export function Dashboard({ locale, dictionary }: Props) {
   const d = dictionary.dashboard;
+  const [displayUsername, setDisplayUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const userId = getStoredUserId();
+    if (!userId) {
+      setDisplayUsername(null);
+      return;
+    }
+
+    let cancelled = false;
+    fetchUsernameByUserId(userId).then((name) => {
+      if (!cancelled && name) setDisplayUsername(name);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const articles = getWikiArticles();
   const recommended = DASHBOARD_RECOMMENDED_WIKI_IDS.map((id) =>
     articles.find((a) => a.id === id),
@@ -43,8 +65,18 @@ export function Dashboard({ locale, dictionary }: Props) {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl border border-zinc-800/80 bg-zinc-900/55 p-6 backdrop-blur md:p-8"
           >
-            <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">{d.title}</h1>
-            <p className="mt-3 max-w-2xl text-zinc-300">{d.subtitle}</p>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">{d.title}</h1>
+                <p className="mt-3 max-w-2xl text-zinc-300">{d.subtitle}</p>
+              </div>
+              {displayUsername ? (
+                <div className="shrink-0 rounded-full border border-zinc-700/90 bg-zinc-950/70 px-4 py-2 text-sm text-zinc-200 shadow-[0_0_0_1px_rgba(59,130,246,0.12)]">
+                  <span className="text-zinc-300">{d.greetingHello}</span>{" "}
+                  <span className="font-medium text-blue-200">{displayUsername}</span>
+                </div>
+              ) : null}
+            </div>
           </motion.header>
 
           <div className="grid gap-6 lg:grid-cols-2">

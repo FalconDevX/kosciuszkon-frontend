@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { clearStoredUserId } from "@/lib/auth-storage";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import { Login } from "./Login";
@@ -67,7 +68,10 @@ export function AuthPanel({ dictionary, locale }: AuthPanelProps) {
         type="button"
         variant="ghost"
         className="mt-3 w-full cursor-pointer text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-100"
-        onClick={() => router.push(`/${locale}/dashboard`)}
+        onClick={() => {
+          clearStoredUserId();
+          router.push(`/${locale}/dashboard`);
+        }}
       >
         {dictionary.auth.continueWithoutRegister}
       </Button>
