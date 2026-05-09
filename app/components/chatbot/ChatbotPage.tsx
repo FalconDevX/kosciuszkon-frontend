@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import { API_BASE_URL, getApiErrorMessage } from "@/lib/api";
+import { postAiChat } from "@/services/api/ai-chat-api";
 
 type Props = {
   locale: Locale;
@@ -18,7 +19,22 @@ type Message = {
   role: "user" | "assistant";
   content: string;
   fileName?: string;
+  model?: string;
 };
+
+function AssistantTyping() {
+  return (
+    <span className="inline-flex items-center gap-1 py-0.5" aria-live="polite">
+      {[0, 150, 300].map((delay) => (
+        <span
+          key={delay}
+          className="size-1.5 animate-bounce rounded-full bg-zinc-400"
+          style={{ animationDelay: `${delay}ms` }}
+        />
+      ))}
+    </span>
+  );
+}
 
 export function ChatbotPage({ locale, dictionary }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,22 +50,20 @@ export function ChatbotPage({ locale, dictionary }: Props) {
     const file = pendingFile;
     if (!text && !file) return;
 
+    const userId = Date.now();
+    const assistantId = userId + 1;
+
     const userMessage: Message = {
-      id: Date.now(),
+      id: userId,
       role: "user",
       content: text,
       fileName: file?.name,
     };
 
-    const assistantPlaceholder =
-      locale === "pl"
-        ? "To testowe okno czatu. Podlaczenie do AI mozemy dodac w kolejnym kroku."
-        : "This is a placeholder chat window. We can connect it to AI in the next step.";
-
-    const assistantMessage: Message = {
-      id: Date.now() + 1,
+    const assistantShell: Message = {
+      id: assistantId,
       role: "assistant",
-      content: assistantPlaceholder,
+      content: "",
     };
 
     setChatStarted(true);
@@ -59,38 +73,58 @@ export function ChatbotPage({ locale, dictionary }: Props) {
       fileInputRef.current.value = "";
     }
 
-    if (file) {
-      setIsSending(true);
-      try {
+    setMessages((prev) => [...prev, userMessage, assistantShell]);
+    setIsSending(true);
+
+    const fileOnlyMessage =
+      locale === "pl"
+        ? `Przesłano plik „${file?.name ?? ""}”. Co mogę z nim zrobić?`
+        : `Uploaded file "${file?.name ?? ""}". What can I do with it?`;
+
+    const networkError =
+      locale === "pl"
+        ? "Nie udało się połączyć z serwerem. Sprawdź połączenie."
+        : "Could not reach the server. Check your connection.";
+
+    const uploadErrorPrefix =
+      locale === "pl" ? "Nie udało się wysłać pliku." : "Could not upload the file.";
+
+    try {
+      let messageForModel = text;
+      if (file) {
         const formData = new FormData();
         formData.set("file", file);
-        const response = await fetch(`${API_BASE_URL}/files/upload`, {
+        const uploadResponse = await fetch(`${API_BASE_URL}/files/upload`, {
           method: "POST",
           body: formData,
         });
-        const content = !response.ok
-          ? `${assistantPlaceholder}\n\n${await getApiErrorMessage(response)}`
-          : assistantPlaceholder;
-        setMessages((prev) => [
-          ...prev,
-          userMessage,
-          { ...assistantMessage, content },
-        ]);
-      } catch {
-        const fallback =
-          locale === "pl"
-            ? "Nie udało się wysłać pliku. Sprawdź połączenie z serwerem."
-            : "Could not upload the file. Check your connection to the server.";
-        setMessages((prev) => [
-          ...prev,
-          userMessage,
-          { ...assistantMessage, content: `${assistantPlaceholder}\n\n${fallback}` },
-        ]);
-      } finally {
-        setIsSending(false);
+        if (!uploadResponse.ok) {
+          const detail = await getApiErrorMessage(uploadResponse);
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantId
+                ? { ...m, content: `${uploadErrorPrefix}\n\n${detail}` }
+                : m,
+            ),
+          );
+          return;
+        }
+        if (!messageForModel) {
+          messageForModel = fileOnlyMessage;
+        }
       }
-    } else {
-      setMessages((prev) => [...prev, userMessage, assistantMessage]);
+
+      const { response: reply, model } = await postAiChat(messageForModel);
+      setMessages((prev) =>
+        prev.map((m) => (m.id === assistantId ? { ...m, content: reply, model } : m)),
+      );
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : networkError;
+      setMessages((prev) =>
+        prev.map((m) => (m.id === assistantId ? { ...m, content: detail } : m)),
+      );
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -142,7 +176,16 @@ export function ChatbotPage({ locale, dictionary }: Props) {
                       <span className="min-w-0 break-all">{message.fileName}</span>
                     </div>
                   ) : null}
-                  {message.content ? <div className="whitespace-pre-wrap">{message.content}</div> : null}
+                  {message.role === "assistant" && message.content === "" ? (
+                    <AssistantTyping />
+                  ) : message.content ? (
+                    <div className="whitespace-pre-wrap">{message.content}</div>
+                  ) : null}
+                  {message.model ? (
+                    <div className="mt-2 border-t border-zinc-700/80 pt-2 text-[11px] text-zinc-500">
+                      {message.model}
+                    </div>
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -182,11 +225,11 @@ export function ChatbotPage({ locale, dictionary }: Props) {
                 type="button"
                 variant="outline"
                 size="icon"
-                className="h-11 w-11 shrink-0 cursor-pointer border-zinc-700 bg-zinc-950 text-zinc-200 hover:bg-zinc-900"
+                className="h-11 w-11 shrink-0 cursor-pointer border-zinc-700 bg-zinc-950 text-white hover:bg-zinc-900 hover:text-white [&_svg]:text-white"
                 aria-label={locale === "pl" ? "Dodaj plik" : "Attach file"}
                 onClick={() => fileInputRef.current?.click()}
               >
-                <Paperclip className="size-4" />
+                <Paperclip className="size-4 text-white" />
               </Button>
               <input
                 value={prompt}
