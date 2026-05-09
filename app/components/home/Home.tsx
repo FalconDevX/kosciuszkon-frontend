@@ -129,7 +129,7 @@ export function Home({ locale, dictionary }: HomeProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.14, ease: "easeOut" }}
           >
-            <AuthPanel dictionary={dictionary} />
+            <AuthPanel dictionary={dictionary} locale={locale} />
           </motion.div>
         </div>
       </section>

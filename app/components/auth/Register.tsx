@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import { API_BASE_URL, getApiErrorMessage } from "@/lib/api";
 
@@ -9,9 +11,11 @@ const inputClassName =
 
 type RegisterProps = {
   dictionary: Dictionary;
+  locale: Locale;
 };
 
-export function Register({ dictionary }: RegisterProps) {
+export function Register({ dictionary, locale }: RegisterProps) {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,6 +56,7 @@ export function Register({ dictionary }: RegisterProps) {
       }
 
       setStatus({ type: "success", message: "Registration successful." });
+      router.push(`/${locale}/dashboard`);
     } catch {
       setStatus({
         type: "error",

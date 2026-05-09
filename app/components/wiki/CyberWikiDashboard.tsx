@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/app/components/home/Navbar";
 import { WikiArticleList } from "@/app/components/wiki/WikiArticleList";
 import { WikiArticleView } from "@/app/components/wiki/WikiArticleView";
@@ -22,12 +23,30 @@ const categories = getWikiCategories();
 const articles = getWikiArticles();
 
 export function CyberWikiDashboard({ locale, dictionary }: Props) {
+  const searchParams = useSearchParams();
+  const articleFromUrl =
+    searchParams.get("article") ?? searchParams.get("a") ?? "";
+
   const [selectedCategory, setSelectedCategory] = useState(categories[0]?.id ?? "");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredArticles = useWikiSearch(articles, selectedCategory, searchQuery);
   const { selectedArticleId, selectedArticle, setSelectedArticleId } =
     useSelectedArticle(filteredArticles);
+
+  useEffect(() => {
+    if (!articleFromUrl) return;
+    const match = articles.find((item) => item.id === articleFromUrl);
+    if (!match) return;
+    setSelectedCategory(match.category);
+    setSearchQuery("");
+  }, [articleFromUrl]);
+
+  useEffect(() => {
+    if (!articleFromUrl) return;
+    if (!filteredArticles.some((item) => item.id === articleFromUrl)) return;
+    setSelectedArticleId(articleFromUrl);
+  }, [articleFromUrl, filteredArticles, setSelectedArticleId]);
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100">

@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import { API_BASE_URL, getApiErrorMessage } from "@/lib/api";
 
@@ -9,9 +11,11 @@ const inputClassName =
 
 type LoginProps = {
   dictionary: Dictionary;
+  locale: Locale;
 };
 
-export function Login({ dictionary }: LoginProps) {
+export function Login({ dictionary, locale }: LoginProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +47,7 @@ export function Login({ dictionary }: LoginProps) {
       }
 
       setStatus({ type: "success", message: "Login successful." });
+      router.push(`/${locale}/dashboard`);
     } catch {
       setStatus({
         type: "error",

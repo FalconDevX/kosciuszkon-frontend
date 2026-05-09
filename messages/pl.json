@@ -7,7 +7,8 @@
     "chatbotAi": "Chatbot",
     "wikiConcepts": "Kluczowe pojecia",
     "interactiveTests": "Interaktywne testy",
-    "quiz": "Quiz"
+    "quiz": "Quiz",
+    "dashboard": "Panel"
   },
   "auth": {
     "panelTag": "Panel SafeClick",
@@ -38,5 +39,15 @@
       "Personalizowane ścieżki nauki",
       "Natychmiastowy feedback i analiza"
     ]
+  },
+  "dashboard": {
+    "title": "Twój panel",
+    "subtitle": "Wróć do nauki: quizy i wybrane artykuły z wiki.",
+    "quizCardTitle": "Quizy",
+    "quizCardBody": "{{count}} ścieżki tematyczne. Każda sesja to {{questions}} pytań (~{{minutes}} min).",
+    "quizCta": "Przejdź do quizów",
+    "recommendedTitle": "Polecane artykuły",
+    "recommendedSubtitle": "Wybrane tematy do lektury w Kluczowych pojęciach.",
+    "readArticle": "Czytaj artykuł"
   }
 }

@@ -7,7 +7,8 @@
     "chatbotAi": "Chatbot",
     "wikiConcepts": "Key Concepts",
     "interactiveTests": "Interactive Tests",
-    "quiz": "Quiz"
+    "quiz": "Quiz",
+    "dashboard": "Dashboard"
   },
   "auth": {
     "panelTag": "SafeClick Panel",
@@ -38,5 +39,15 @@
       "Personalized learning paths",
       "Instant feedback and analysis"
     ]
+  },
+  "dashboard": {
+    "title": "Your dashboard",
+    "subtitle": "Continue learning with quizzes and curated wiki articles.",
+    "quizCardTitle": "Quizzes",
+    "quizCardBody": "{{count}} topic tracks. Each session has {{questions}} questions (~{{minutes}} min).",
+    "quizCta": "Open quizzes",
+    "recommendedTitle": "Recommended articles",
+    "recommendedSubtitle": "Hand-picked topics to read next in Key Concepts.",
+    "readArticle": "Read article"
   }
 }

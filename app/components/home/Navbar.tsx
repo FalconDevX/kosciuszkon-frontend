@@ -15,6 +15,7 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
   const pathname = usePathname();
   const pathWithoutLocale = pathname.replace(/^\/(en|pl)(?=\/|$)/, "") || "/";
   const navigationItems = [
+    { href: "/dashboard", label: dictionary.navbar.dashboard },
     { href: "/chatbot-ai", label: dictionary.navbar.chatbotAi },
     { href: "/wiki-concepts", label: dictionary.navbar.wikiConcepts },
     { href: "/interactive-tests", label: dictionary.navbar.interactiveTests },
