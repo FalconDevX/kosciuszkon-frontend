@@ -20,20 +20,10 @@ type Props = {
   dictionary: Dictionary;
 };
 
-const categoryButtons: Array<{ label: string; category?: QuizCategory }> = [
-  { label: "Random Quiz" },
-  { label: "Phishing Quiz", category: "Phishing" },
-  { label: "Password Security Quiz", category: "Password Security" },
-  { label: "Web Security Quiz", category: "Web Security" },
-  { label: "Workplace Security Quiz", category: "Workplace Security" },
-  { label: "AI Threats Quiz", category: "AI Threats" },
-];
-
 export function QuizzesDashboard({ locale, dictionary }: Props) {
   const quiz = useQuizSession();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lastLoadedCount, setLastLoadedCount] = useState<number>(0);
 
   const popularQuizzes = useMemo(
     () => [
@@ -62,7 +52,6 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
         ? await quizApi.getCategoryQuiz(category)
         : await quizApi.getRandomQuiz();
 
-      setLastLoadedCount(questions.length);
       if (!questions.length) {
         setError("No quiz questions available for this selection.");
         return;
@@ -126,20 +115,6 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
             </div>
           </motion.div>
 
-          <div className="grid gap-2 rounded-xl border border-zinc-800/70 bg-zinc-900/40 p-2 md:grid-cols-2 xl:grid-cols-3">
-            {categoryButtons.map((item) => (
-              <Button
-                key={item.label}
-                variant="ghost"
-                disabled={isLoading}
-                onClick={() => loadQuiz(item.category)}
-                className="justify-start text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
-              >
-                {item.label}
-              </Button>
-            ))}
-          </div>
-
           {isLoading ? (
             <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-sm text-zinc-300">
               Loading quiz questions...
@@ -148,11 +123,6 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
           {error ? (
             <div className="rounded-xl border border-zinc-700 bg-zinc-900/70 p-4 text-sm text-zinc-200">
               {error}
-            </div>
-          ) : null}
-          {!isLoading && !error && lastLoadedCount === 0 ? (
-            <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-sm text-zinc-300">
-              Start a quiz to load questions from the backend.
             </div>
           ) : null}
 
