@@ -28,7 +28,7 @@ export function CategoryCard({ category, onStart, disabled }: Props) {
       <p className="mt-2 text-sm text-zinc-400">{category.description}</p>
 
       <div className="mt-4 flex items-center justify-between text-xs text-zinc-400">
-        <span>{category.quizCount} quizzes</span>
+        <span>{category.quizCount} questions</span>
         <span>{category.estimatedTime}</span>
       </div>
 

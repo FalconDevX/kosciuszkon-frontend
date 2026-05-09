@@ -5,6 +5,10 @@ import { motion } from "framer-motion";
 import { Brain, Dice5, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/app/components/home/Navbar";
+import {
+  buildQuizSessionBestEffort,
+  DEFAULT_QUIZ_SESSION_QUESTIONS,
+} from "@/lib/quiz-limits";
 import { quizApi } from "@/services/api/quiz-api";
 import { useQuizSession } from "@/hooks/useQuizSession";
 import type { Dictionary } from "@/i18n/types";
@@ -23,43 +27,47 @@ type Props = {
 export function QuizzesDashboard({ locale, dictionary }: Props) {
   const quiz = useQuizSession();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const popularQuizzes = useMemo(
     () => [
-      { title: "Phishing Detection", difficulty: "Medium" as const, questions: 15, estimatedTime: "8 min" },
+      {
+        title: "Phishing Detection",
+        difficulty: "Medium" as const,
+        questions: DEFAULT_QUIZ_SESSION_QUESTIONS,
+        estimatedTime: "5 min",
+      },
       {
         title: "Password Audit Sprint",
         difficulty: "Beginner" as const,
-        questions: 10,
-        estimatedTime: "6 min",
+        questions: DEFAULT_QUIZ_SESSION_QUESTIONS,
+        estimatedTime: "5 min",
       },
       {
         title: "Browser Risk Radar",
         difficulty: "Advanced" as const,
-        questions: 18,
-        estimatedTime: "11 min",
+        questions: DEFAULT_QUIZ_SESSION_QUESTIONS,
+        estimatedTime: "5 min",
       },
     ],
     [],
   );
 
-  const loadQuiz = async (category?: QuizCategory) => {
-    setError(null);
+  const loadQuiz = async (
+    category?: QuizCategory,
+    questionCount: number = DEFAULT_QUIZ_SESSION_QUESTIONS,
+  ) => {
     setIsLoading(true);
     try {
-      const questions = category
+      const raw = category
         ? await quizApi.getCategoryQuiz(category)
         : await quizApi.getRandomQuiz();
 
-      if (!questions.length) {
-        setError("No quiz questions available for this selection.");
-        return;
+      const questions = buildQuizSessionBestEffort(raw, questionCount);
+      if (questions?.length) {
+        quiz.start(questions);
       }
-
-      quiz.start(questions);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load quiz data.");
+    } catch {
+      /* ignore: no banner above quiz grid */
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +95,9 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button
-                onClick={() => loadQuiz()}
+                onClick={() =>
+                  loadQuiz(undefined, DEFAULT_QUIZ_SESSION_QUESTIONS)
+                }
                 disabled={isLoading}
                 className="bg-blue-500/85 text-zinc-100 hover:bg-blue-500"
               >
@@ -95,7 +105,9 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
                 Random Quiz
               </Button>
               <Button
-                onClick={() => loadQuiz("Phishing")}
+                onClick={() =>
+                  loadQuiz("Phishing", DEFAULT_QUIZ_SESSION_QUESTIONS)
+                }
                 disabled={isLoading}
                 variant="outline"
                 className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800"
@@ -104,7 +116,9 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
                 Daily Challenge
               </Button>
               <Button
-                onClick={() => loadQuiz("AI Threats")}
+                onClick={() =>
+                  loadQuiz("AI Threats", DEFAULT_QUIZ_SESSION_QUESTIONS)
+                }
                 disabled={isLoading}
                 variant="outline"
                 className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800"
@@ -120,18 +134,15 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
               Loading quiz questions...
             </div>
           ) : null}
-          {error ? (
-            <div className="rounded-xl border border-zinc-700 bg-zinc-900/70 p-4 text-sm text-zinc-200">
-              {error}
-            </div>
-          ) : null}
 
           <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
             {categoryMetadata.map((category) => (
               <CategoryCard
                 key={`${category.title}-${category.category}`}
                 category={category}
-                onStart={() => loadQuiz(category.category)}
+                onStart={() =>
+                  loadQuiz(category.category, DEFAULT_QUIZ_SESSION_QUESTIONS)
+                }
                 disabled={isLoading}
               />
             ))}
@@ -147,7 +158,9 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
                   difficulty={item.difficulty}
                   questions={item.questions}
                   estimatedTime={item.estimatedTime}
-                  onPlay={() => loadQuiz()}
+                  onPlay={() =>
+                    loadQuiz(undefined, DEFAULT_QUIZ_SESSION_QUESTIONS)
+                  }
                   disabled={isLoading}
                 />
               ))}
