@@ -6,6 +6,7 @@ import { Navbar } from "@/app/components/home/Navbar";
 import { Button } from "@/components/ui/button";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
+import { API_BASE_URL, getApiErrorMessage } from "@/lib/api";
 
 type Props = {
   locale: Locale;
@@ -25,8 +26,9 @@ export function ChatbotPage({ locale, dictionary }: Props) {
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [chatStarted, setChatStarted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isSending, setIsSending] = useState(false);
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const text = prompt.trim();
     const file = pendingFile;
@@ -39,21 +41,56 @@ export function ChatbotPage({ locale, dictionary }: Props) {
       fileName: file?.name,
     };
 
+    const assistantPlaceholder =
+      locale === "pl"
+        ? "To testowe okno czatu. Podlaczenie do AI mozemy dodac w kolejnym kroku."
+        : "This is a placeholder chat window. We can connect it to AI in the next step.";
+
     const assistantMessage: Message = {
       id: Date.now() + 1,
       role: "assistant",
-      content:
-        locale === "pl"
-          ? "To testowe okno czatu. Podlaczenie do AI mozemy dodac w kolejnym kroku."
-          : "This is a placeholder chat window. We can connect it to AI in the next step.",
+      content: assistantPlaceholder,
     };
 
-    setMessages((prev) => [...prev, userMessage, assistantMessage]);
     setChatStarted(true);
     setPrompt("");
     setPendingFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+
+    if (file) {
+      setIsSending(true);
+      try {
+        const formData = new FormData();
+        formData.set("file", file);
+        const response = await fetch(`${API_BASE_URL}/files/upload`, {
+          method: "POST",
+          body: formData,
+        });
+        const content = !response.ok
+          ? `${assistantPlaceholder}\n\n${await getApiErrorMessage(response)}`
+          : assistantPlaceholder;
+        setMessages((prev) => [
+          ...prev,
+          userMessage,
+          { ...assistantMessage, content },
+        ]);
+      } catch {
+        const fallback =
+          locale === "pl"
+            ? "Nie udało się wysłać pliku. Sprawdź połączenie z serwerem."
+            : "Could not upload the file. Check your connection to the server.";
+        setMessages((prev) => [
+          ...prev,
+          userMessage,
+          { ...assistantMessage, content: `${assistantPlaceholder}\n\n${fallback}` },
+        ]);
+      } finally {
+        setIsSending(false);
+      }
+    } else {
+      setMessages((prev) => [...prev, userMessage, assistantMessage]);
     }
   };
 
@@ -157,7 +194,11 @@ export function ChatbotPage({ locale, dictionary }: Props) {
                 placeholder={locale === "pl" ? "Wpisz prompt..." : "Type a prompt..."}
                 className="h-11 min-w-0 flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-3 text-sm outline-none placeholder:text-zinc-500 focus:border-blue-500/60"
               />
-              <Button type="submit" className="h-11 cursor-pointer bg-blue-500 text-zinc-100 hover:bg-blue-500/90">
+              <Button
+                type="submit"
+                disabled={isSending}
+                className="h-11 cursor-pointer bg-blue-500 text-zinc-100 hover:bg-blue-500/90 disabled:opacity-60"
+              >
                 <Send className="size-4" />
               </Button>
             </div>

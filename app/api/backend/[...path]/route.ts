@@ -14,15 +14,22 @@ async function forwardRequest(
 
   const method = request.method;
   const hasBody = method !== "GET" && method !== "HEAD";
-  const body = hasBody ? await request.text() : undefined;
+  const body = hasBody ? await request.arrayBuffer() : undefined;
+
+  const headers: Record<string, string> = {};
+  const contentType = request.headers.get("content-type");
+  if (contentType) {
+    headers["Content-Type"] = contentType;
+  }
+  const authorization = request.headers.get("authorization");
+  if (authorization) {
+    headers.Authorization = authorization;
+  }
 
   const upstreamResponse = await fetch(targetUrl.toString(), {
     method,
-    headers: {
-      "Content-Type": request.headers.get("content-type") ?? "application/json",
-      Authorization: request.headers.get("authorization") ?? "",
-    },
-    body,
+    headers,
+    body: hasBody ? body : undefined,
   });
 
   return new Response(upstreamResponse.body, {
