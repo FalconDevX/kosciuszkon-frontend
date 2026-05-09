@@ -56,5 +56,26 @@
     "title": "Settings",
     "subtitle": "Manage your account and preferences here. More options coming soon.",
     "backToDashboard": "Back to dashboard"
+  },
+  "wiki": {
+    "pageTitle": "Cybersecurity Wiki",
+    "pageSubtitle": "Learn cybersecurity concepts, recognize threats, and improve your digital safety.",
+    "searchPlaceholder": "Search cybersecurity topics...",
+    "categoriesHeading": "Categories",
+    "emptyArticleList": "No topics found for this category/search.",
+    "selectArticlePrompt": "Select an article to preview.",
+    "sectionHowItWorks": "How It Works",
+    "sectionExamples": "Examples",
+    "sectionRedFlags": "Red Flags",
+    "sectionPreventionTips": "Prevention Tips",
+    "sectionRelatedTopics": "Related Topics",
+    "warningTitle": "Warning",
+    "warningBody": "High-risk behaviors often begin with urgency and unverified requests.",
+    "bestPracticeTitle": "Best Practice",
+    "bestPracticeBody": "Always validate identity and context before sharing data or approving actions.",
+    "dangerLow": "Low",
+    "dangerMedium": "Medium",
+    "dangerHigh": "High",
+    "dangerCritical": "Critical"
   }
 }

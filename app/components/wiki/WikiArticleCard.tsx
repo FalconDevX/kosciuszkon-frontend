@@ -8,6 +8,7 @@ type WikiArticleCardProps = {
   article: WikiArticle;
   selected: boolean;
   onSelect: () => void;
+  dangerLevelLabel: string;
 };
 
 function dangerBadgeClass(level: DangerLevel) {
@@ -17,7 +18,12 @@ function dangerBadgeClass(level: DangerLevel) {
   return "border-rose-500/35 bg-rose-500/15 text-rose-300";
 }
 
-export function WikiArticleCard({ article, selected, onSelect }: WikiArticleCardProps) {
+export function WikiArticleCard({
+  article,
+  selected,
+  onSelect,
+  dangerLevelLabel,
+}: WikiArticleCardProps) {
   return (
     <motion.button
       type="button"
@@ -35,7 +41,7 @@ export function WikiArticleCard({ article, selected, onSelect }: WikiArticleCard
           className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] ${dangerBadgeClass(article.dangerLevel)}`}
         >
           <AlertTriangle className="size-3" />
-          {article.dangerLevel}
+          {dangerLevelLabel}
         </span>
       </div>
       <p className="mt-2 line-clamp-2 text-sm text-zinc-400">{article.description}</p>

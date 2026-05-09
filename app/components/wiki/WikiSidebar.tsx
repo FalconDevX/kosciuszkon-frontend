@@ -7,16 +7,18 @@ type WikiSidebarProps = {
   categories: WikiCategory[];
   selectedCategory: string;
   onCategorySelect: (categoryId: string) => void;
+  categoriesHeading: string;
 };
 
 export function WikiSidebar({
   categories,
   selectedCategory,
   onCategorySelect,
+  categoriesHeading,
 }: WikiSidebarProps) {
   return (
     <aside className="rounded-2xl border border-zinc-800/80 bg-zinc-900/55 p-3 backdrop-blur lg:sticky lg:top-20">
-      <p className="px-2 text-xs uppercase tracking-[0.16em] text-zinc-400">Categories</p>
+      <p className="px-2 text-xs uppercase tracking-[0.16em] text-zinc-400">{categoriesHeading}</p>
       <div className="mt-2 space-y-1.5">
         {categories.map((category) => {
           const isActive = selectedCategory === category.id;

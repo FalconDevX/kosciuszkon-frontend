@@ -41,7 +41,7 @@ export function Dashboard({ locale, dictionary }: Props) {
     };
   }, []);
 
-  const articles = getWikiArticles();
+  const articles = getWikiArticles(locale);
   const recommended = DASHBOARD_RECOMMENDED_WIKI_IDS.map((id) =>
     articles.find((a) => a.id === id),
   ).filter((a): a is WikiArticle => a != null);

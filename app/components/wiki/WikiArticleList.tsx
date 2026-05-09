@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Dictionary } from "@/i18n/types";
+import { wikiDangerLabel } from "@/lib/wiki-danger-label";
 import type { WikiArticle } from "@/types/wiki";
 import { WikiArticleCard } from "./WikiArticleCard";
 
@@ -8,17 +10,21 @@ type WikiArticleListProps = {
   articles: WikiArticle[];
   selectedArticleId: string | null;
   onSelect: (id: string) => void;
+  emptyMessage: string;
+  wiki: Dictionary["wiki"];
 };
 
 export function WikiArticleList({
   articles,
   selectedArticleId,
   onSelect,
+  emptyMessage,
+  wiki,
 }: WikiArticleListProps) {
   if (!articles.length) {
     return (
       <div className="rounded-xl border border-dashed border-zinc-700 bg-zinc-900/45 p-4 text-sm text-zinc-400">
-        No topics found for this category/search.
+        {emptyMessage}
       </div>
     );
   }
@@ -36,6 +42,7 @@ export function WikiArticleList({
             article={article}
             selected={selectedArticleId === article.id}
             onSelect={() => onSelect(article.id)}
+            dangerLevelLabel={wikiDangerLabel(article.dangerLevel, wiki)}
           />
         </motion.div>
       ))}

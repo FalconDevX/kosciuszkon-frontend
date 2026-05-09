@@ -2,10 +2,13 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, ShieldAlert, ShieldCheck } from "lucide-react";
+import type { Dictionary } from "@/i18n/types";
+import { wikiDangerLabel } from "@/lib/wiki-danger-label";
 import type { DangerLevel, WikiArticle } from "@/types/wiki";
 
 type WikiArticleViewProps = {
   article: WikiArticle | null;
+  wiki: Dictionary["wiki"];
 };
 
 function dangerBadgeClass(level: DangerLevel) {
@@ -28,7 +31,7 @@ function Section({ title, items }: { title: string; items: string[] }) {
   );
 }
 
-export function WikiArticleView({ article }: WikiArticleViewProps) {
+export function WikiArticleView({ article, wiki }: WikiArticleViewProps) {
   return (
     <AnimatePresence mode="wait">
       <motion.article
@@ -39,7 +42,7 @@ export function WikiArticleView({ article }: WikiArticleViewProps) {
         className="rounded-2xl border border-zinc-800/80 bg-zinc-900/55 p-5 backdrop-blur md:p-6"
       >
         {!article ? (
-          <p className="text-sm text-zinc-400">Select an article to preview.</p>
+          <p className="text-sm text-zinc-400">{wiki.selectArticlePrompt}</p>
         ) : (
           <div className="space-y-6">
             <header className="space-y-3">
@@ -48,7 +51,7 @@ export function WikiArticleView({ article }: WikiArticleViewProps) {
                   className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs ${dangerBadgeClass(article.dangerLevel)}`}
                 >
                   <AlertTriangle className="size-3.5" />
-                  {article.dangerLevel}
+                  {wikiDangerLabel(article.dangerLevel, wiki)}
                 </span>
                 <span className="rounded-full border border-zinc-700 px-2.5 py-1 text-xs text-zinc-400">
                   {article.readingTime}
@@ -58,30 +61,26 @@ export function WikiArticleView({ article }: WikiArticleViewProps) {
               <p className="max-w-3xl text-sm leading-6 text-zinc-300">{article.description}</p>
             </header>
 
-            <Section title="How It Works" items={article.howItWorks} />
-            <Section title="Examples" items={article.examples} />
-            <Section title="Red Flags" items={article.redFlags} />
-            <Section title="Prevention Tips" items={article.preventionTips} />
-            <Section title="Related Topics" items={article.relatedTopics} />
+            <Section title={wiki.sectionHowItWorks} items={article.howItWorks} />
+            <Section title={wiki.sectionExamples} items={article.examples} />
+            <Section title={wiki.sectionRedFlags} items={article.redFlags} />
+            <Section title={wiki.sectionPreventionTips} items={article.preventionTips} />
+            <Section title={wiki.sectionRelatedTopics} items={article.relatedTopics} />
 
             <div className="grid gap-3 md:grid-cols-2">
               <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3">
                 <p className="flex items-center gap-2 text-sm font-medium text-rose-200">
                   <ShieldAlert className="size-4" />
-                  Warning
+                  {wiki.warningTitle}
                 </p>
-                <p className="mt-2 text-sm text-rose-100/90">
-                  High-risk behaviors often begin with urgency and unverified requests.
-                </p>
+                <p className="mt-2 text-sm text-rose-100/90">{wiki.warningBody}</p>
               </div>
               <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3">
                 <p className="flex items-center gap-2 text-sm font-medium text-emerald-200">
                   <ShieldCheck className="size-4" />
-                  Best Practice
+                  {wiki.bestPracticeTitle}
                 </p>
-                <p className="mt-2 text-sm text-emerald-100/90">
-                  Always validate identity and context before sharing data or approving actions.
-                </p>
+                <p className="mt-2 text-sm text-emerald-100/90">{wiki.bestPracticeBody}</p>
               </div>
             </div>
           </div>

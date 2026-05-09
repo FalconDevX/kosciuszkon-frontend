@@ -5,7 +5,7 @@
     "english": "Angielski",
     "polish": "Polski", 
     "chatbotAi": "Chatbot",
-    "wikiConcepts": "Kluczowe pojecia",
+    "wikiConcepts": "Kluczowe pojęcia",
     "interactiveTests": "Interaktywne testy",
     "quiz": "Quiz",
     "dashboard": "Panel"
@@ -56,5 +56,26 @@
     "title": "Ustawienia",
     "subtitle": "Zarządzaj kontem i preferencjami. Więcej opcji wkrótce.",
     "backToDashboard": "Wróć do panelu"
+  },
+  "wiki": {
+    "pageTitle": "Wiki cyberbezpieczeństwa",
+    "pageSubtitle": "Poznaj pojęcia z cyberbezpieczeństwa, rozpoznawaj zagrożenia i dbaj o swoje bezpieczeństwo w sieci.",
+    "searchPlaceholder": "Szukaj tematów z cyberbezpieczeństwa...",
+    "categoriesHeading": "Kategorie",
+    "emptyArticleList": "Brak tematów dla tej kategorii lub wyszukiwania.",
+    "selectArticlePrompt": "Wybierz artykuł, aby zobaczyć treść.",
+    "sectionHowItWorks": "Jak to działa",
+    "sectionExamples": "Przykłady",
+    "sectionRedFlags": "Czerwone flagi",
+    "sectionPreventionTips": "Wskazówki zapobiegawcze",
+    "sectionRelatedTopics": "Powiązane tematy",
+    "warningTitle": "Uwaga",
+    "warningBody": "Ryzykowne zachowania często zaczynają się od poczucia pilności i niezweryfikowanych próśb.",
+    "bestPracticeTitle": "Dobra praktyka",
+    "bestPracticeBody": "Zawsze potwierdzaj tożsamość i kontekst zanim udostępnisz dane lub zatwierdzisz działania.",
+    "dangerLow": "Niskie",
+    "dangerMedium": "Średnie",
+    "dangerHigh": "Wysokie",
+    "dangerCritical": "Krytyczne"
   }
 }
