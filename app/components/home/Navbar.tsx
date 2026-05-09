@@ -14,6 +14,11 @@ type NavbarProps = {
 export function Navbar({ locale, dictionary }: NavbarProps) {
   const pathname = usePathname();
   const pathWithoutLocale = pathname.replace(/^\/(en|pl)(?=\/|$)/, "") || "/";
+  const navigationItems = [
+    { href: "/chatbot-ai", label: dictionary.navbar.chatbotAi },
+    { href: "/wiki-concepts", label: dictionary.navbar.wikiConcepts },
+    { href: "/interactive-tests", label: dictionary.navbar.interactiveTests },
+  ];
 
   const languageOptions: Array<{ code: Locale; flagSrc: string; label: string }> = [
     { code: "en", flagSrc: "/en_flag.svg", label: dictionary.navbar.english },
@@ -40,6 +45,24 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
           priority
         />
       </div>
+      <nav className="hidden items-center gap-1 rounded-md border border-zinc-800 bg-zinc-900/70 p-1 md:flex">
+        {navigationItems.map((item) => {
+          const isActive = pathWithoutLocale === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={`/${locale}${item.href}`}
+              className={`rounded px-3 py-1.5 text-sm transition-colors ${
+                isActive
+                  ? "bg-blue-500/20 text-zinc-100"
+                  : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+              }`}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1 rounded-md border border-zinc-800 bg-zinc-900/90 p-1">
           {languageOptions.map((option) => {
