@@ -165,83 +165,76 @@
   text-shadow: 0 0 10px rgba(96, 165, 250, 0.2);
 }
 
-/* Shooting stars: diagonal path (--dx / --dy), white gradient tail + head */
-@keyframes shooting-star-flight {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0;
-  }
-  3% {
-    opacity: 1;
-  }
-  88% {
-    opacity: 1;
-  }
+/* Sparkle orbs: white dots, varied sizes, medium opacity, fade in/out */
+@keyframes sparkle-orb-a {
+  0%,
   100% {
-    transform: translate3d(var(--dx), var(--dy), 0);
     opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.45);
+  }
+  22% {
+    opacity: 0.46;
+    transform: translate3d(1px, 2px, 0) scale(1);
+  }
+  48% {
+    opacity: 0.2;
+    transform: translate3d(-1px, 1px, 0) scale(0.82);
+  }
+  72% {
+    opacity: 0.4;
+    transform: translate3d(2px, -1px, 0) scale(1.04);
+  }
+  92% {
+    opacity: 0.08;
+    transform: translate3d(0, 1px, 0) scale(0.7);
   }
 }
 
-.shooting-star-layer .shooting-star {
+@keyframes sparkle-orb-b {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.5);
+  }
+  28% {
+    opacity: 0.34;
+    transform: translate3d(-2px, 1px, 0) scale(0.95);
+  }
+  52% {
+    opacity: 0.52;
+    transform: translate3d(1px, 2px, 0) scale(1.08);
+  }
+  76% {
+    opacity: 0.26;
+    transform: translate3d(0, -1px, 0) scale(0.88);
+  }
+  94% {
+    opacity: 0.12;
+    transform: translate3d(-1px, 0, 0) scale(0.62);
+  }
+}
+
+.sparkle-orb-layer .sparkle-orb {
   position: absolute;
-  width: 0;
-  height: 0;
-  animation-name: shooting-star-flight;
-  animation-timing-function: linear;
+  display: block;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.72);
+  box-shadow: 0 0 5px rgb(255 255 255 / 0.28);
+  animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   will-change: transform, opacity;
 }
 
-.shooting-star-layer .shooting-star__rotate {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 1px;
-  height: 1px;
-  overflow: visible;
-  transform: rotate(135deg);
-  transform-origin: 100% 50%;
+.sparkle-orb-layer .sparkle-orb--a {
+  animation-name: sparkle-orb-a;
 }
 
-.shooting-star-layer .shooting-star__streak {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: var(--tail);
-  height: var(--streak-h, 2px);
-  border-radius: 9999px;
-  transform-origin: 100% 50%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.12) 28%,
-    rgba(255, 255, 255, 0.55) 62%,
-    rgba(255, 255, 255, 0.95) 88%,
-    rgb(255, 255, 255) 100%
-  );
-  box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.45),
-    0 0 18px rgba(255, 255, 255, 0.2);
-}
-
-.shooting-star-layer .shooting-star__head {
-  position: absolute;
-  right: -2px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 3px;
-  border-radius: 9999px;
-  background: rgb(255, 255, 255);
-  box-shadow:
-    0 0 6px rgb(255, 255, 255),
-    0 0 14px rgba(255, 255, 255, 0.55);
+.sparkle-orb-layer .sparkle-orb--b {
+  animation-name: sparkle-orb-b;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shooting-star-layer .shooting-star {
+  .sparkle-orb-layer .sparkle-orb {
     animation: none !important;
     opacity: 0 !important;
     visibility: hidden;
