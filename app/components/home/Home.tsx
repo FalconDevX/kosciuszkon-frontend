@@ -1,13 +1,24 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { AuthPanel } from "@/app/components/auth/AuthPanel";
 import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
+import { HomeMiniChat } from "@/app/components/home/HomeMiniChat";
 import { Navbar } from "./Navbar";
+import { getStoredUserId } from "@/lib/auth-storage";
 import type { Dictionary } from "@/i18n/types";
 import type { Locale } from "@/i18n/config";
+
+const HomeLoggedInLaptop = dynamic(
+  () =>
+    import("@/app/components/home/HomeLoggedInLaptop").then((m) => ({
+      default: m.HomeLoggedInLaptop,
+    })),
+  { ssr: false },
+);
 
 type HomeProps = {
   locale: Locale;
@@ -18,6 +29,11 @@ export function Home({ locale, dictionary }: HomeProps) {
   const featureHighlights = dictionary.home.featureHighlights.slice(0, 4);
   const headline = dictionary.home.mainHeadline;
   const [typedLength, setTypedLength] = useState(0);
+  const [storedUserState, setStoredUserState] = useState<"loading" | "in" | "out">("loading");
+
+  useEffect(() => {
+    setStoredUserState(getStoredUserId() ? "in" : "out");
+  }, []);
 
   useEffect(() => {
     setTypedLength(0);
@@ -131,10 +147,20 @@ export function Home({ locale, dictionary }: HomeProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.14, ease: "easeOut" }}
           >
-            <AuthPanel dictionary={dictionary} locale={locale} />
+            {storedUserState === "loading" ? (
+              <div
+                className="w-full max-w-md min-h-[min(520px,70vh)] rounded-2xl border border-zinc-800/40 bg-zinc-900/40"
+                aria-hidden
+              />
+            ) : storedUserState === "in" ? (
+              <HomeLoggedInLaptop dictionary={dictionary} locale={locale} />
+            ) : (
+              <AuthPanel dictionary={dictionary} locale={locale} />
+            )}
           </motion.div>
         </div>
       </section>
+      <HomeMiniChat locale={locale} dictionary={dictionary.home} />
     </main>
   );
 }

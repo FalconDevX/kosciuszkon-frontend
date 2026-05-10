@@ -1,6 +1,7 @@
 "use client";
 
-import { type ChangeEvent, FormEvent, useRef, useState } from "react";
+import { type ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Globe, Paperclip, Send, X } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
 import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
@@ -59,12 +60,31 @@ function getHostname(url: string): string {
 
 export function ChatbotPage({ locale, dictionary }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialQConsumed = useRef(false);
   const [prompt, setPrompt] = useState("");
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [webSearchEnabled, setWebSearchEnabled] = useState(false);
   const [chatStarted, setChatStarted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSending, setIsSending] = useState(false);
+
+  useEffect(() => {
+    if (initialQConsumed.current) return;
+    const raw = searchParams.get("q");
+    if (raw === null) return;
+    initialQConsumed.current = true;
+    let text = raw;
+    try {
+      text = decodeURIComponent(raw);
+    } catch {
+      /* keep raw */
+    }
+    text = text.replace(/\+/g, " ").trim();
+    if (text) setPrompt(text);
+    router.replace(`/${locale}/chatbot-ai`, { scroll: false });
+  }, [searchParams, router, locale]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

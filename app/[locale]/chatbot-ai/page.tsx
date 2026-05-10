@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ChatbotPage } from "@/app/components/chatbot/ChatbotPage";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -15,5 +16,9 @@ export default async function ChatbotAiPage({ params }: PageProps) {
   }
 
   const dictionary = await getDictionary(locale as Locale);
-  return <ChatbotPage locale={locale} dictionary={dictionary} />;
+  return (
+    <Suspense fallback={null}>
+      <ChatbotPage locale={locale as Locale} dictionary={dictionary} />
+    </Suspense>
+  );
 }

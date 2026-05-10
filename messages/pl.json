@@ -8,7 +8,11 @@
     "wikiConcepts": "Kluczowe pojęcia",
     "interactiveTests": "Interaktywne testy",
     "quiz": "Quiz",
-    "dashboard": "Panel"
+    "dashboard": "Panel",
+    "login": "Zaloguj",
+    "logout": "Wyloguj",
+    "signedInAs": "Zalogowano jako",
+    "loggingOut": "Wylogowywanie..."
   },
   "auth": {
     "panelTag": "Panel SafeClick",
@@ -38,7 +42,19 @@
       "Symulacje phishingu oparte na realnych scenariuszach",
       "Personalizowane ścieżki nauki",
       "Natychmiastowy feedback i analiza"
-    ]
+    ],
+    "miniChatTitle": "Szybkie pytanie do SafeClick AI",
+    "miniChatBubble": "Zadaj mi swoje pytanie",
+    "miniChatPlaceholder": "Wpisz pytanie…",
+    "miniChatSend": "Otwórz czat",
+    "miniChatClose": "Zamknij",
+    "miniChatOpenFab": "Otwórz szybki czat",
+    "miniChatCloseFab": "Zamknij szybki czat",
+    "miniChatHint": "Wypróbuj SafeClick AI",
+    "loggedInPanelTag": "Workspace",
+    "loggedInTitle": "Jesteś zalogowany",
+    "loggedInSubtitle": "Wróć do nauki — Twój panel jest gotowy.",
+    "loggedInDashboardCta": "Przejdź do panelu"
   },
   "dashboard": {
     "title": "Twój panel",
@@ -54,7 +70,7 @@
     "quizStats": {
       "sectionTitle": "Postępy w quizach",
       "emptyHint": "Ukończ quiz, żeby zobaczyć tu punkty i postęp.",
-      "goToQuizzes": "Przejdź do quizów",
+      "emptyBrandLine": "SafeClick — Kościuszkon",
       "pointsChartTitle": "Punkty w sesji",
       "pointsChartSubtitle": "Poprawne odpowiedzi w ostatnich próbach.",
       "progressChartTitle": "Suma punktów w czasie",

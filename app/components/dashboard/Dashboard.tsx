@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Settings } from "lucide-react";
+import { ArrowRight, BookOpen, ClipboardList, Settings } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
 import { getStoredUserId } from "@/lib/auth-storage";
 import { DASHBOARD_RECOMMENDED_WIKI_IDS } from "@/lib/dashboard-recommended-articles";
@@ -101,14 +100,8 @@ export function Dashboard({ locale, dictionary }: Props) {
                 className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 backdrop-blur"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-700 bg-zinc-950">
-                    <Image
-                      src="/safe_click_dark_small.png"
-                      alt="SafeClick shield logo"
-                      width={36}
-                      height={36}
-                      className="h-9 w-9 object-contain"
-                    />
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-950">
+                    <ClipboardList className="size-5 text-blue-400" aria-hidden />
                   </div>
                   <div className="min-w-0 flex-1 space-y-3">
                     <h2 className="text-lg font-semibold text-zinc-100">{d.quizCardTitle}</h2>

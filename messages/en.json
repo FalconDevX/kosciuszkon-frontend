@@ -8,7 +8,11 @@
     "wikiConcepts": "Key Concepts",
     "interactiveTests": "Interactive Tests",
     "quiz": "Quiz",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "signedInAs": "Signed in as",
+    "loggingOut": "Signing out..."
   },
   "auth": {
     "panelTag": "SafeClick Panel",
@@ -38,7 +42,19 @@
       "Real-world phishing simulations",
       "Personalized learning paths",
       "Instant feedback and analysis"
-    ]
+    ],
+    "miniChatTitle": "Quick question for SafeClick AI",
+    "miniChatBubble": "Ask anything you want to know about cybersecurity",
+    "miniChatPlaceholder": "Type your question…",
+    "miniChatSend": "Open chat",
+    "miniChatClose": "Close",
+    "miniChatOpenFab": "Open quick chat",
+    "miniChatCloseFab": "Close quick chat",
+    "miniChatHint": "Try SafeClick AI",
+    "loggedInPanelTag": "Workspace",
+    "loggedInTitle": "You're signed in",
+    "loggedInSubtitle": "Pick up where you left off — your dashboard is ready.",
+    "loggedInDashboardCta": "Open dashboard"
   },
   "dashboard": {
     "title": "Your dashboard",
@@ -54,7 +70,7 @@
     "quizStats": {
       "sectionTitle": "Quiz progress",
       "emptyHint": "Complete a quiz to see your points and progress here.",
-      "goToQuizzes": "Go to quizzes",
+      "emptyBrandLine": "SafeClick — Kościuszkon",
       "pointsChartTitle": "Points per session",
       "pointsChartSubtitle": "Correct answers in each of your recent attempts.",
       "progressChartTitle": "Total points over time",

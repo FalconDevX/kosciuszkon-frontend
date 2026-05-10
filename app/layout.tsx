@@ -18,7 +18,7 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
-const title = "SafeClick — Kościuszkon";
+const title = "SafeClick";
 const description =
   "Master cybersecurity and stay one step ahead of threats. Quizzes, wiki, and SafeClick AI assistant.";
 
