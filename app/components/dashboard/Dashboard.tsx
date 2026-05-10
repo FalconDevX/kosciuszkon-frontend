@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -19,103 +18,78 @@ import { QUIZ_CATEGORY_COUNT } from "@/app/components/quizzes/quiz-metadata";
 import { DashboardQuizCharts } from "@/app/components/dashboard/DashboardQuizCharts";
 import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
 import { getWikiArticles } from "@/services/wikiApi";
-
 type Props = {
-  locale: Locale;
-  dictionary: Dictionary;
+    locale: Locale;
+    dictionary: Dictionary;
 };
-
 export function Dashboard({ locale, dictionary }: Props) {
-  const d = dictionary.dashboard;
-  const router = useRouter();
-  const { userId } = useCurrentUser();
-  const [displayUsername, setDisplayUsername] = useState<string | null>(null);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  useEffect(() => {
-    const userId = getStoredUserId();
-    if (!userId) {
-      setDisplayUsername(null);
-      return;
-    }
-
-    let cancelled = false;
-    fetchUsernameByUserId(userId).then((name) => {
-      if (!cancelled && name) setDisplayUsername(name);
-    });
-
-    return () => {
-      cancelled = true;
+    const d = dictionary.dashboard;
+    const router = useRouter();
+    const { userId } = useCurrentUser();
+    const [displayUsername, setDisplayUsername] = useState<string | null>(null);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+    useEffect(() => {
+        const userId = getStoredUserId();
+        if (!userId) {
+            setDisplayUsername(null);
+            return;
+        }
+        let cancelled = false;
+        fetchUsernameByUserId(userId).then((name) => {
+            if (!cancelled && name)
+                setDisplayUsername(name);
+        });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+    const handleLogout = async () => {
+        if (isLoggingOut)
+            return;
+        setIsLoggingOut(true);
+        try {
+            await logoutUser();
+            router.push(`/${locale}`);
+        }
+        finally {
+            setIsLoggingOut(false);
+        }
     };
-  }, []);
-
-  const handleLogout = async () => {
-    if (isLoggingOut) return;
-    setIsLoggingOut(true);
-    try {
-      await logoutUser();
-      router.push(`/${locale}`);
-    } finally {
-      setIsLoggingOut(false);
-    }
-  };
-
-  const articles = getWikiArticles(locale);
-  const recommended = DASHBOARD_RECOMMENDED_WIKI_IDS.map((id) =>
-    articles.find((a) => a.id === id),
-  ).filter((a): a is WikiArticle => a != null);
-
-  const quizBody = d.quizCardBody
-    .replace("{{count}}", String(QUIZ_CATEGORY_COUNT))
-    .replace("{{questions}}", String(DEFAULT_QUIZ_SESSION_QUESTIONS))
-    .replace("{{minutes}}", String(DEFAULT_QUIZ_SESSION_QUESTIONS));
-
-  return (
-    <main className="relative min-h-screen bg-zinc-950 text-zinc-100">
-      <Navbar locale={locale} dictionary={dictionary} />
+    const articles = getWikiArticles(locale);
+    const recommended = DASHBOARD_RECOMMENDED_WIKI_IDS.map((id) => articles.find((a) => a.id === id)).filter((a): a is WikiArticle => a != null);
+    const quizBody = d.quizCardBody
+        .replace("{{count}}", String(QUIZ_CATEGORY_COUNT))
+        .replace("{{questions}}", String(DEFAULT_QUIZ_SESSION_QUESTIONS))
+        .replace("{{minutes}}", String(DEFAULT_QUIZ_SESSION_QUESTIONS));
+    return (<main className="relative min-h-screen bg-zinc-950 text-zinc-100">
+      <Navbar locale={locale} dictionary={dictionary}/>
 
       <section className="relative overflow-hidden px-4 pb-10 pt-6 md:px-6">
-        <div className="pointer-events-none absolute inset-0 bg-zinc-950" />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(161,161,170,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(161,161,170,0.18)_1px,transparent_1px)] bg-size-[28px_28px] opacity-[0.12]" />
+        <div className="pointer-events-none absolute inset-0 bg-zinc-950"/>
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(161,161,170,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(161,161,170,0.18)_1px,transparent_1px)] bg-size-[28px_28px] opacity-[0.12]"/>
         <FallingStarsBackground />
 
         <div className="relative z-10 mx-auto w-full max-w-[1100px] space-y-8">
-          <motion.header
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl border border-zinc-800/80 bg-zinc-900/55 p-6 backdrop-blur md:p-8"
-          >
+          <motion.header initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl border border-zinc-800/80 bg-zinc-900/55 p-6 backdrop-blur md:p-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
                 <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">{d.title}</h1>
                 <p className="mt-3 max-w-2xl text-zinc-300">{d.subtitle}</p>
               </div>
               <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
-                {displayUsername ? (
-                  <div className="rounded-full border border-zinc-700/90 bg-zinc-950/70 px-4 py-2 text-sm text-zinc-200 shadow-[0_0_0_1px_rgba(59,130,246,0.12)]">
+                {displayUsername ? (<div className="rounded-full border border-zinc-700/90 bg-zinc-950/70 px-4 py-2 text-sm text-zinc-200 shadow-[0_0_0_1px_rgba(59,130,246,0.12)]">
                     <span className="text-zinc-300">{d.greetingHello}</span>{" "}
                     <span className="font-medium text-blue-200">{displayUsername}</span>
-                  </div>
-                ) : null}
+                  </div>) : null}
                 <div className="flex flex-wrap items-center gap-2">
-                  <Link
-                    href={`/${locale}/settings`}
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-950 px-4 text-sm font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-50"
-                  >
-                    <Settings className="size-4 text-zinc-400" aria-hidden />
+                  <Link href={`/${locale}/settings`} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-950 px-4 text-sm font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-50">
+                    <Settings className="size-4 text-zinc-400" aria-hidden/>
                     {d.settings}
                   </Link>
-                  {userId ? (
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      disabled={isLoggingOut}
-                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-rose-500/35 bg-rose-500/10 px-4 text-sm font-medium text-rose-100 transition-colors hover:border-rose-500/55 hover:bg-rose-500/20 hover:text-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      <LogOut className="size-4" aria-hidden />
+                  {userId ? (<button type="button" onClick={handleLogout} disabled={isLoggingOut} className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-rose-500/35 bg-rose-500/10 px-4 text-sm font-medium text-rose-100 transition-colors hover:border-rose-500/55 hover:bg-rose-500/20 hover:text-rose-50 disabled:cursor-not-allowed disabled:opacity-60">
+                      <LogOut className="size-4" aria-hidden/>
                       {isLoggingOut ? d.loggingOut : d.logout}
-                    </button>
-                  ) : null}
+                    </button>) : null}
                 </div>
               </div>
             </div>
@@ -123,59 +97,38 @@ export function Dashboard({ locale, dictionary }: Props) {
 
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="space-y-6">
-              <motion.section
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 }}
-                className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 backdrop-blur"
-              >
+              <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 backdrop-blur">
                 <div className="flex items-start gap-4">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-950">
-                    <ClipboardList className="size-5 text-blue-400" aria-hidden />
+                    <ClipboardList className="size-5 text-blue-400" aria-hidden/>
                   </div>
                   <div className="min-w-0 flex-1 space-y-3">
                     <h2 className="text-lg font-semibold text-zinc-100">{d.quizCardTitle}</h2>
                     <p className="text-sm leading-relaxed text-zinc-400">{quizBody}</p>
-                    <Link
-                      href={`/${locale}/quiz`}
-                      className="mt-2 inline-flex h-10 items-center gap-2 rounded-lg bg-blue-500 px-4 text-sm font-medium text-zinc-950 transition-colors hover:bg-blue-400"
-                    >
+                    <Link href={`/${locale}/quiz`} className="mt-2 inline-flex h-10 items-center gap-2 rounded-lg bg-blue-500 px-4 text-sm font-medium text-zinc-950 transition-colors hover:bg-blue-400">
                       {d.quizCta}
-                      <ArrowRight className="size-4" aria-hidden />
+                      <ArrowRight className="size-4" aria-hidden/>
                     </Link>
                   </div>
                 </div>
               </motion.section>
 
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.08 }}
-              >
-                <DashboardQuizCharts locale={locale} dictionary={d.quizStats} />
+              <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}>
+                <DashboardQuizCharts locale={locale} dictionary={d.quizStats}/>
               </motion.div>
             </div>
 
-            <motion.section
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 backdrop-blur"
-            >
+            <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 backdrop-blur">
               <div className="flex items-center gap-3 border-b border-zinc-800/80 pb-4">
-                <BookOpen className="size-5 text-blue-400" aria-hidden />
+                <BookOpen className="size-5 text-blue-400" aria-hidden/>
                 <div>
                   <h2 className="text-lg font-semibold text-zinc-100">{d.recommendedTitle}</h2>
                   <p className="text-sm text-zinc-400">{d.recommendedSubtitle}</p>
                 </div>
               </div>
               <ul className="mt-4 space-y-3">
-                {recommended.map((article) => (
-                  <li key={article.id}>
-                    <Link
-                      href={`/${locale}/wiki-concepts?article=${encodeURIComponent(article.id)}`}
-                      className="group flex items-start justify-between gap-3 rounded-xl border border-zinc-800/60 bg-zinc-950/50 px-4 py-3 transition-colors hover:border-blue-500/35 hover:bg-zinc-900/90"
-                    >
+                {recommended.map((article) => (<li key={article.id}>
+                    <Link href={`/${locale}/wiki-concepts?article=${encodeURIComponent(article.id)}`} className="group flex items-start justify-between gap-3 rounded-xl border border-zinc-800/60 bg-zinc-950/50 px-4 py-3 transition-colors hover:border-blue-500/35 hover:bg-zinc-900/90">
                       <div className="min-w-0">
                         <p className="font-medium text-zinc-100 group-hover:text-blue-100">
                           {article.title}
@@ -189,13 +142,11 @@ export function Dashboard({ locale, dictionary }: Props) {
                         {d.readArticle}
                       </span>
                     </Link>
-                  </li>
-                ))}
+                  </li>))}
               </ul>
             </motion.section>
           </div>
         </div>
       </section>
-    </main>
-  );
+    </main>);
 }
