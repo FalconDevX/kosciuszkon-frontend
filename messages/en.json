@@ -8,11 +8,7 @@
     "wikiConcepts": "Key Concepts",
     "interactiveTests": "Interactive Tests",
     "quiz": "Quiz",
-    "dashboard": "Dashboard",
-    "login": "Sign in",
-    "logout": "Sign out",
-    "signedInAs": "Signed in as",
-    "loggingOut": "Signing out..."
+    "dashboard": "Dashboard"
   },
   "auth": {
     "panelTag": "SafeClick Panel",
@@ -67,6 +63,8 @@
     "readArticle": "Read article",
     "greetingHello": "Hello,",
     "settings": "Settings",
+    "logout": "Sign out",
+    "loggingOut": "Signing out…",
     "quizStats": {
       "sectionTitle": "Quiz progress",
       "emptyHint": "Complete a quiz to see your points and progress here.",

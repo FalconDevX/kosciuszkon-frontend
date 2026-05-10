@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, BookOpen, ClipboardList, Settings } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowRight, BookOpen, ClipboardList, LogOut, Settings } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
 import { getStoredUserId } from "@/lib/auth-storage";
+import { useCurrentUser } from "@/lib/use-current-user";
+import { logoutUser } from "@/services/api/auth-api";
 import { DASHBOARD_RECOMMENDED_WIKI_IDS } from "@/lib/dashboard-recommended-articles";
 import { DEFAULT_QUIZ_SESSION_QUESTIONS } from "@/lib/quiz-limits";
 import { fetchUsernameByUserId } from "@/lib/user-profile";
@@ -24,7 +27,10 @@ type Props = {
 
 export function Dashboard({ locale, dictionary }: Props) {
   const d = dictionary.dashboard;
+  const router = useRouter();
+  const { userId } = useCurrentUser();
   const [displayUsername, setDisplayUsername] = useState<string | null>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const userId = getStoredUserId();
@@ -42,6 +48,17 @@ export function Dashboard({ locale, dictionary }: Props) {
       cancelled = true;
     };
   }, []);
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    try {
+      await logoutUser();
+      router.push(`/${locale}`);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   const articles = getWikiArticles(locale);
   const recommended = DASHBOARD_RECOMMENDED_WIKI_IDS.map((id) =>
@@ -80,13 +97,26 @@ export function Dashboard({ locale, dictionary }: Props) {
                     <span className="font-medium text-blue-200">{displayUsername}</span>
                   </div>
                 ) : null}
-                <Link
-                  href={`/${locale}/settings`}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-950 px-4 text-sm font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-50"
-                >
-                  <Settings className="size-4 text-zinc-400" aria-hidden />
-                  {d.settings}
-                </Link>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Link
+                    href={`/${locale}/settings`}
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-950 px-4 text-sm font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-50"
+                  >
+                    <Settings className="size-4 text-zinc-400" aria-hidden />
+                    {d.settings}
+                  </Link>
+                  {userId ? (
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-rose-500/35 bg-rose-500/10 px-4 text-sm font-medium text-rose-100 transition-colors hover:border-rose-500/55 hover:bg-rose-500/20 hover:text-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      <LogOut className="size-4" aria-hidden />
+                      {isLoggingOut ? d.loggingOut : d.logout}
+                    </button>
+                  ) : null}
+                </div>
               </div>
             </div>
           </motion.header>

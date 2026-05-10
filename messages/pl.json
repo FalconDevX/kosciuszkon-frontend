@@ -8,11 +8,7 @@
     "wikiConcepts": "Kluczowe pojęcia",
     "interactiveTests": "Interaktywne testy",
     "quiz": "Quiz",
-    "dashboard": "Panel",
-    "login": "Zaloguj",
-    "logout": "Wyloguj",
-    "signedInAs": "Zalogowano jako",
-    "loggingOut": "Wylogowywanie..."
+    "dashboard": "Panel"
   },
   "auth": {
     "panelTag": "Panel SafeClick",
@@ -67,6 +63,8 @@
     "readArticle": "Czytaj artykuł",
     "greetingHello": "Witaj,",
     "settings": "Ustawienia",
+    "logout": "Wyloguj",
+    "loggingOut": "Wylogowywanie…",
     "quizStats": {
       "sectionTitle": "Postępy w quizach",
       "emptyHint": "Ukończ quiz, żeby zobaczyć tu punkty i postęp.",
