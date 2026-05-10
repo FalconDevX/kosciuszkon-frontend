@@ -52,6 +52,16 @@
     "loggedInSubtitle": "Wróć do nauki — Twój panel jest gotowy.",
     "loggedInDashboardCta": "Przejdź do panelu"
   },
+  "chatbot": {
+    "statusThinking": "Myślę…",
+    "statusGatheringData": "Zbieram dane…",
+    "statusReadingDatabase": "Odczytuję bazę danych…",
+    "statusAnalyzing": "Analizuję…",
+    "statusFormulatingAnswer": "Układam odpowiedź…",
+    "statusThisMayTakeAMoment": "To może potrwać kilka sekund.",
+    "statusSearchingWeb": "Szukam w sieci…",
+    "statusSources": "Źródła"
+  },
   "dashboard": {
     "title": "Twój panel",
     "subtitle": "Wróć do nauki: quizy i wybrane artykuły z wiki.",

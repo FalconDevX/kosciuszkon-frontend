@@ -52,6 +52,16 @@
     "loggedInSubtitle": "Pick up where you left off - your dashboard is ready.",
     "loggedInDashboardCta": "Open dashboard"
   },
+  "chatbot": {
+    "statusThinking": "Thinking…",
+    "statusGatheringData": "Gathering data…",
+    "statusReadingDatabase": "Reading database…",
+    "statusAnalyzing": "Analyzing…",
+    "statusFormulatingAnswer": "Formulating an answer…",
+    "statusThisMayTakeAMoment": "This may take a few seconds.",
+    "statusSearchingWeb": "Searching the web…",
+    "statusSources": "Sources"
+  },
   "dashboard": {
     "title": "Your dashboard",
     "subtitle": "Continue learning with quizzes and curated wiki articles.",

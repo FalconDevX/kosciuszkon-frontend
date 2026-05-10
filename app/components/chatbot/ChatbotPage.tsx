@@ -34,21 +34,63 @@ function createEmptySessionRecord(locale: Locale): ChatSessionRecord {
     };
 }
 
-function AssistantTyping({ searchingWeb, locale }: {
+function AssistantTyping({
+    searchingWeb,
+    locale,
+    dictionary,
+}: {
     searchingWeb?: boolean;
     locale: Locale;
+    dictionary: Dictionary;
 }) {
-    return (<span className="inline-flex items-center gap-2 py-0.5" aria-live="polite">
-      {searchingWeb ? (<>
-          <Globe className="size-3.5 shrink-0 animate-pulse text-blue-300" aria-hidden/>
-          <span className="text-xs text-zinc-400">
-            {locale === "pl" ? "Szukam w sieci..." : "Searching the web..."}
-          </span>
-        </>) : null}
-      <span className="inline-flex items-center gap-1">
-        {[0, 150, 300].map((delay) => (<span key={delay} className="size-1.5 animate-bounce rounded-full bg-zinc-400" style={{ animationDelay: `${delay}ms` }}/>))}
-      </span>
-    </span>);
+    const steps = useMemo(() => ([
+        dictionary.chatbot.statusThinking,
+        dictionary.chatbot.statusGatheringData,
+        dictionary.chatbot.statusReadingDatabase,
+        dictionary.chatbot.statusAnalyzing,
+        dictionary.chatbot.statusFormulatingAnswer,
+    ]), [dictionary]);
+
+    const [idx, setIdx] = useState(0);
+
+    useEffect(() => {
+        setIdx(0);
+        const start = Date.now();
+        const tick = () => {
+            const elapsedMs = Date.now() - start;
+            const next = Math.min(steps.length - 1, Math.floor(elapsedMs / 1600));
+            setIdx(next);
+        };
+        tick();
+        const id = window.setInterval(tick, 500);
+        return () => window.clearInterval(id);
+    }, [steps, searchingWeb, locale]);
+
+    return (
+        <span className="inline-flex items-start gap-2 py-0.5" aria-live="polite">
+            {searchingWeb ? (
+                <>
+                    <Globe className="size-3.5 shrink-0 animate-pulse text-blue-300" aria-hidden />
+                    <span className="text-xs text-zinc-400">{dictionary.chatbot.statusSearchingWeb}</span>
+                </>
+            ) : null}
+            <span className="flex min-w-0 flex-col">
+                <span className="inline-flex items-center gap-2">
+                    <span className="text-xs text-zinc-300">{steps[idx] ?? steps[0]}</span>
+                    <span className="inline-flex items-center gap-1" aria-hidden>
+                        {[0, 150, 300].map((delay) => (
+                            <span
+                                key={delay}
+                                className="size-1.5 animate-bounce rounded-full bg-zinc-400"
+                                style={{ animationDelay: `${delay}ms` }}
+                            />
+                        ))}
+                    </span>
+                </span>
+                <span className="text-[11px] text-zinc-500">{dictionary.chatbot.statusThisMayTakeAMoment}</span>
+            </span>
+        </span>
+    );
 }
 
 function getHostname(url: string): string {
@@ -375,11 +417,19 @@ export function ChatbotPage({ locale, dictionary }: Props) {
                         <Paperclip className="size-3.5 shrink-0 opacity-90" aria-hidden/>
                         <span className="min-w-0 break-all">{message.fileName}</span>
                       </div>) : null}
-                    {message.role === "assistant" && message.content === "" ? (<AssistantTyping searchingWeb={message.searchingWeb} locale={locale}/>) : message.content ? (message.role === "assistant" ? (<AssistantMarkdown content={message.content}/>) : (<div className="whitespace-pre-wrap">{message.content}</div>)) : null}
+                    {message.role === "assistant" && message.content === "" ? (
+                        <AssistantTyping searchingWeb={message.searchingWeb} locale={locale} dictionary={dictionary} />
+                    ) : message.content ? (
+                        message.role === "assistant" ? (
+                            <AssistantMarkdown content={message.content} />
+                        ) : (
+                            <div className="whitespace-pre-wrap">{message.content}</div>
+                        )
+                    ) : null}
                     {message.role === "assistant" && message.sources && message.sources.length > 0 ? (<div className="mt-2 border-t border-zinc-700/80 pt-2">
                         <div className="mb-1 flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-zinc-500">
                           <Globe className="size-3 shrink-0" aria-hidden/>
-                          {locale === "pl" ? "Źródła" : "Sources"}
+                          {dictionary.chatbot.statusSources}
                         </div>
                         <ul className="flex flex-col gap-0.5 text-[11px]">
                           {message.sources.map((s, i) => (<li key={`${message.id}-src-${i}`} className="truncate">
