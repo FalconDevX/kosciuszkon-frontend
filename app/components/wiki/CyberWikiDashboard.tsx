@@ -25,8 +25,19 @@ export function CyberWikiDashboard({ locale, dictionary }: Props) {
     const articleFromUrl = searchParams.get("article") ?? searchParams.get("a") ?? "";
     const [selectedCategory, setSelectedCategory] = useState(categories[0]?.id ?? "");
     const [searchQuery, setSearchQuery] = useState("");
-    const filteredArticles = useWikiSearch(articles, selectedCategory, searchQuery);
+    const { filteredArticles, sidebarCategories } = useWikiSearch(articles, categories, selectedCategory, searchQuery);
     const { selectedArticleId, selectedArticle, setSelectedArticleId } = useSelectedArticle(filteredArticles);
+
+    useEffect(() => {
+        const query = searchQuery.trim();
+        if (!query)
+            return;
+        if (sidebarCategories.some((c) => c.id === selectedCategory))
+            return;
+        const next = sidebarCategories[0]?.id;
+        if (next)
+            setSelectedCategory(next);
+    }, [searchQuery, sidebarCategories, selectedCategory]);
     useEffect(() => {
         if (!articleFromUrl)
             return;
@@ -61,7 +72,7 @@ export function CyberWikiDashboard({ locale, dictionary }: Props) {
           </motion.header>
 
           <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
-            <WikiSidebar categories={categories} selectedCategory={selectedCategory} onCategorySelect={setSelectedCategory} categoriesHeading={wiki.categoriesHeading}/>
+            <WikiSidebar categories={sidebarCategories} selectedCategory={selectedCategory} onCategorySelect={setSelectedCategory} categoriesHeading={wiki.categoriesHeading}/>
 
             <div className="grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
               <WikiArticleList articles={filteredArticles} selectedArticleId={selectedArticleId} onSelect={setSelectedArticleId} emptyMessage={wiki.emptyArticleList} wiki={wiki}/>
