@@ -6,18 +6,20 @@ import type { QuizDifficulty } from "@/types/quiz";
 
 type Props = {
   title: string;
+  metaLine: string;
   difficulty: QuizDifficulty;
-  questions: number;
-  estimatedTime: string;
+  difficultyLabel: string;
+  playAriaLabel: string;
   onPlay: () => void;
   disabled?: boolean;
 };
 
 export function QuizCard({
   title,
+  metaLine,
   difficulty,
-  questions,
-  estimatedTime,
+  difficultyLabel,
+  playAriaLabel,
   onPlay,
   disabled,
 }: Props) {
@@ -28,19 +30,18 @@ export function QuizCard({
     >
       <div>
         <p className="font-medium">{title}</p>
-        <p className="text-sm text-zinc-400">
-          {questions} questions • {estimatedTime}
-        </p>
+        <p className="text-sm text-zinc-400">{metaLine}</p>
         <span
           className={`mt-1 inline-flex rounded-full border px-2 py-0.5 text-xs ${difficultyBadgeClass(difficulty)}`}
         >
-          {difficulty}
+          {difficultyLabel}
         </span>
       </div>
       <Button
         size="sm"
         onClick={onPlay}
         disabled={disabled}
+        aria-label={playAriaLabel}
         className="bg-zinc-800 text-zinc-100 hover:bg-zinc-700"
       >
         <Play className="size-4" />

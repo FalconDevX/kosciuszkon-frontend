@@ -6,9 +6,10 @@ import { Search } from "lucide-react";
 type WikiSearchProps = {
   value: string;
   onChange: (value: string) => void;
+  placeholder: string;
 };
 
-export function WikiSearch({ value, onChange }: WikiSearchProps) {
+export function WikiSearch({ value, onChange, placeholder }: WikiSearchProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -19,7 +20,7 @@ export function WikiSearch({ value, onChange }: WikiSearchProps) {
       <input
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        placeholder="Search cybersecurity topics..."
+        placeholder={placeholder}
         className="w-full bg-transparent text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
       />
     </motion.div>

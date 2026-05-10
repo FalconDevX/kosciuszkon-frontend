@@ -5,9 +5,10 @@
     "english": "Angielski",
     "polish": "Polski", 
     "chatbotAi": "Chatbot",
-    "wikiConcepts": "Kluczowe pojecia",
+    "wikiConcepts": "Kluczowe pojęcia",
     "interactiveTests": "Interaktywne testy",
-    "quiz": "Quiz"
+    "quiz": "Quiz",
+    "dashboard": "Panel"
   },
   "auth": {
     "panelTag": "Panel SafeClick",
@@ -38,5 +39,110 @@
       "Personalizowane ścieżki nauki",
       "Natychmiastowy feedback i analiza"
     ]
+  },
+  "dashboard": {
+    "title": "Twój panel",
+    "subtitle": "Wróć do nauki: quizy i wybrane artykuły z wiki.",
+    "quizCardTitle": "Quizy",
+    "quizCardBody": "{{count}} ścieżki tematyczne. Każda sesja to {{questions}} pytań (~{{minutes}} min).",
+    "quizCta": "Przejdź do quizów",
+    "recommendedTitle": "Polecane artykuły",
+    "recommendedSubtitle": "Wybrane tematy do lektury w Kluczowych pojęciach.",
+    "readArticle": "Czytaj artykuł",
+    "greetingHello": "Witaj,",
+    "settings": "Ustawienia"
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "subtitle": "Zarządzaj kontem i preferencjami. Więcej opcji wkrótce.",
+    "backToDashboard": "Wróć do panelu"
+  },
+  "wiki": {
+    "pageTitle": "Wiki cyberbezpieczeństwa",
+    "pageSubtitle": "Poznaj pojęcia z cyberbezpieczeństwa, rozpoznawaj zagrożenia i dbaj o swoje bezpieczeństwo w sieci.",
+    "searchPlaceholder": "Szukaj tematów z cyberbezpieczeństwa...",
+    "categoriesHeading": "Kategorie",
+    "emptyArticleList": "Brak tematów dla tej kategorii lub wyszukiwania.",
+    "selectArticlePrompt": "Wybierz artykuł, aby zobaczyć treść.",
+    "sectionHowItWorks": "Jak to działa",
+    "sectionExamples": "Przykłady",
+    "sectionRedFlags": "Czerwone flagi",
+    "sectionPreventionTips": "Wskazówki zapobiegawcze",
+    "sectionRelatedTopics": "Powiązane tematy",
+    "warningTitle": "Uwaga",
+    "warningBody": "Ryzykowne zachowania często zaczynają się od poczucia pilności i niezweryfikowanych próśb.",
+    "bestPracticeTitle": "Dobra praktyka",
+    "bestPracticeBody": "Zawsze potwierdzaj tożsamość i kontekst zanim udostępnisz dane lub zatwierdzisz działania.",
+    "dangerLow": "Niskie",
+    "dangerMedium": "Średnie",
+    "dangerHigh": "Wysokie",
+    "dangerCritical": "Krytyczne"
+  },
+  "quiz": {
+    "pageTitle": "Quizy z cyberbezpieczeństwa",
+    "pageSubtitle": "Sprawdź swoje umiejętności, podnieś świadomość i ucz się rozpoznawać realne zagrożenia.",
+    "randomQuiz": "Losowy quiz",
+    "dailyChallenge": "Wyzwanie dnia",
+    "aiGeneratedQuiz": "Quiz generowany przez AI",
+    "loading": "Ładowanie pytań quizu...",
+    "popularTitle": "Popularne quizy",
+    "startQuiz": "Rozpocznij quiz",
+    "playQuizAria": "Rozpocznij quiz",
+    "questionsCount": "{{count}} pytań",
+    "popularMeta": "{{questions}} pytań • {{time}}",
+    "timeMin": "{{count}} min",
+    "difficulties": {
+      "beginner": "Początkujący",
+      "medium": "Średni",
+      "advanced": "Zaawansowany",
+      "mixed": "Mieszany"
+    },
+    "categories": [
+      {
+        "title": "Phishing",
+        "description": "Fałszywe maile, podejrzane linki i inżynieria społeczna."
+      },
+      {
+        "title": "Bezpieczeństwo haseł",
+        "description": "Silne hasła, MFA i obrona przed wyciekami poświadczeń."
+      },
+      {
+        "title": "Bezpieczeństwo WWW",
+        "description": "Niebezpieczne strony, ataki na przeglądarkę i pobieranie plików."
+      },
+      {
+        "title": "Bezpieczeństwo w pracy",
+        "description": "Zagrożenia korporacyjne, ryzyko insidera i bezpieczeństwo urządzeń."
+      },
+      {
+        "title": "AI i współczesne zagrożenia",
+        "description": "Deepfake’i, oszustwa z użyciem AI i nowe wzorce phishingu."
+      },
+      {
+        "title": "Początkujący / zaawansowany",
+        "description": "Adaptacyjne zestawy na start i dla zaawansowanych."
+      }
+    ],
+    "popular": [
+      { "title": "Wykrywanie phishingu" },
+      { "title": "Sprint audytu haseł" },
+      { "title": "Radar ryzyka przeglądarki" }
+    ],
+    "modal": {
+      "closeAria": "Zamknij quiz",
+      "sessionTitle": "Sesja quizu",
+      "questionProgress": "Pytanie {{current}}/{{total}}",
+      "previous": "Wstecz",
+      "next": "Dalej",
+      "finishQuiz": "Zakończ quiz",
+      "resultsTitle": "Wyniki",
+      "scoreLine": "Wynik: {{score}}/{{total}} ({{percent}}%)",
+      "yourAnswer": "Twoja odpowiedź:",
+      "correctAnswer": "Poprawna odpowiedź:",
+      "noAnswerSelected": "Nie wybrano odpowiedzi",
+      "unavailable": "Niedostępne",
+      "restartQuiz": "Quiz od nowa",
+      "close": "Zamknij"
+    }
   }
 }

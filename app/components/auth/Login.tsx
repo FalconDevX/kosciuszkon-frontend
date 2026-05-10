@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
+import { setStoredUserId } from "@/lib/auth-storage";
 import { API_BASE_URL, getApiErrorMessage } from "@/lib/api";
+import { extractUserIdFromAuthResponse } from "@/lib/user-profile";
 
 const inputClassName =
   "h-10 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-500 focus:border-blue-500/70";
 
 type LoginProps = {
   dictionary: Dictionary;
+  locale: Locale;
 };
 
-export function Login({ dictionary }: LoginProps) {
+export function Login({ dictionary, locale }: LoginProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,7 +48,19 @@ export function Login({ dictionary }: LoginProps) {
         return;
       }
 
+      let payload: unknown = null;
+      try {
+        payload = await response.json();
+      } catch {
+        /* empty body */
+      }
+      const userId = extractUserIdFromAuthResponse(payload);
+      if (userId) {
+        setStoredUserId(userId);
+      }
+
       setStatus({ type: "success", message: "Login successful." });
+      router.push(`/${locale}/dashboard`);
     } catch {
       setStatus({
         type: "error",

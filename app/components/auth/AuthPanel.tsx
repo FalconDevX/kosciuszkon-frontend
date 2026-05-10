@@ -1,16 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { clearStoredUserId } from "@/lib/auth-storage";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/types";
 import { Login } from "./Login";
 import { Register } from "./Register";
-import type { Dictionary } from "@/i18n/types";
 
 type AuthPanelProps = {
   dictionary: Dictionary;
+  locale: Locale;
 };
 
-export function AuthPanel({ dictionary }: AuthPanelProps) {
+export function AuthPanel({ dictionary, locale }: AuthPanelProps) {
+  const router = useRouter();
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
   return (
@@ -55,14 +60,18 @@ export function AuthPanel({ dictionary }: AuthPanelProps) {
         </Button>
       </div>
       {authMode === "login" ? (
-        <Login dictionary={dictionary} />
+        <Login dictionary={dictionary} locale={locale} />
       ) : (
-        <Register dictionary={dictionary} />
+        <Register dictionary={dictionary} locale={locale} />
       )}
       <Button
         type="button"
         variant="ghost"
         className="mt-3 w-full cursor-pointer text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-100"
+        onClick={() => {
+          clearStoredUserId();
+          router.push(`/${locale}/dashboard`);
+        }}
       >
         {dictionary.auth.continueWithoutRegister}
       </Button>

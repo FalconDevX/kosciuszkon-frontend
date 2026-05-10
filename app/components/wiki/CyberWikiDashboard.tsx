@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/app/components/home/Navbar";
 import { WikiArticleList } from "@/app/components/wiki/WikiArticleList";
 import { WikiArticleView } from "@/app/components/wiki/WikiArticleView";
@@ -18,16 +19,34 @@ type Props = {
   dictionary: Dictionary;
 };
 
-const categories = getWikiCategories();
-const articles = getWikiArticles();
-
 export function CyberWikiDashboard({ locale, dictionary }: Props) {
+  const wiki = dictionary.wiki;
+  const categories = useMemo(() => getWikiCategories(locale), [locale]);
+  const articles = useMemo(() => getWikiArticles(locale), [locale]);
+  const searchParams = useSearchParams();
+  const articleFromUrl =
+    searchParams.get("article") ?? searchParams.get("a") ?? "";
+
   const [selectedCategory, setSelectedCategory] = useState(categories[0]?.id ?? "");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredArticles = useWikiSearch(articles, selectedCategory, searchQuery);
   const { selectedArticleId, selectedArticle, setSelectedArticleId } =
     useSelectedArticle(filteredArticles);
+
+  useEffect(() => {
+    if (!articleFromUrl) return;
+    const match = articles.find((item) => item.id === articleFromUrl);
+    if (!match) return;
+    setSelectedCategory(match.category);
+    setSearchQuery("");
+  }, [articleFromUrl]);
+
+  useEffect(() => {
+    if (!articleFromUrl) return;
+    if (!filteredArticles.some((item) => item.id === articleFromUrl)) return;
+    setSelectedArticleId(articleFromUrl);
+  }, [articleFromUrl, filteredArticles, setSelectedArticleId]);
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100">
@@ -43,12 +62,14 @@ export function CyberWikiDashboard({ locale, dictionary }: Props) {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-2xl border border-zinc-800/80 bg-zinc-900/55 p-6 backdrop-blur"
           >
-            <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">Cybersecurity Wiki</h1>
-            <p className="mt-2 max-w-3xl text-sm text-zinc-300 md:text-base">
-              Learn cybersecurity concepts, recognize threats, and improve your digital safety.
-            </p>
+            <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">{wiki.pageTitle}</h1>
+            <p className="mt-2 max-w-3xl text-sm text-zinc-300 md:text-base">{wiki.pageSubtitle}</p>
             <div className="mt-4">
-              <WikiSearch value={searchQuery} onChange={setSearchQuery} />
+              <WikiSearch
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder={wiki.searchPlaceholder}
+              />
             </div>
           </motion.header>
 
@@ -57,6 +78,7 @@ export function CyberWikiDashboard({ locale, dictionary }: Props) {
               categories={categories}
               selectedCategory={selectedCategory}
               onCategorySelect={setSelectedCategory}
+              categoriesHeading={wiki.categoriesHeading}
             />
 
             <div className="grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
@@ -64,8 +86,10 @@ export function CyberWikiDashboard({ locale, dictionary }: Props) {
                 articles={filteredArticles}
                 selectedArticleId={selectedArticleId}
                 onSelect={setSelectedArticleId}
+                emptyMessage={wiki.emptyArticleList}
+                wiki={wiki}
               />
-              <WikiArticleView article={selectedArticle} />
+              <WikiArticleView article={selectedArticle} wiki={wiki} />
             </div>
           </div>
         </div>

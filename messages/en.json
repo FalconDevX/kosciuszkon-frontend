@@ -7,7 +7,8 @@
     "chatbotAi": "Chatbot",
     "wikiConcepts": "Key Concepts",
     "interactiveTests": "Interactive Tests",
-    "quiz": "Quiz"
+    "quiz": "Quiz",
+    "dashboard": "Dashboard"
   },
   "auth": {
     "panelTag": "SafeClick Panel",
@@ -38,5 +39,110 @@
       "Personalized learning paths",
       "Instant feedback and analysis"
     ]
+  },
+  "dashboard": {
+    "title": "Your dashboard",
+    "subtitle": "Continue learning with quizzes and curated wiki articles.",
+    "quizCardTitle": "Quizzes",
+    "quizCardBody": "{{count}} topic tracks. Each session has {{questions}} questions (~{{minutes}} min).",
+    "quizCta": "Open quizzes",
+    "recommendedTitle": "Recommended articles",
+    "recommendedSubtitle": "Hand-picked topics to read next in Key Concepts.",
+    "readArticle": "Read article",
+    "greetingHello": "Hello,",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and preferences here. More options coming soon.",
+    "backToDashboard": "Back to dashboard"
+  },
+  "wiki": {
+    "pageTitle": "Cybersecurity Wiki",
+    "pageSubtitle": "Learn cybersecurity concepts, recognize threats, and improve your digital safety.",
+    "searchPlaceholder": "Search cybersecurity topics...",
+    "categoriesHeading": "Categories",
+    "emptyArticleList": "No topics found for this category/search.",
+    "selectArticlePrompt": "Select an article to preview.",
+    "sectionHowItWorks": "How It Works",
+    "sectionExamples": "Examples",
+    "sectionRedFlags": "Red Flags",
+    "sectionPreventionTips": "Prevention Tips",
+    "sectionRelatedTopics": "Related Topics",
+    "warningTitle": "Warning",
+    "warningBody": "High-risk behaviors often begin with urgency and unverified requests.",
+    "bestPracticeTitle": "Best Practice",
+    "bestPracticeBody": "Always validate identity and context before sharing data or approving actions.",
+    "dangerLow": "Low",
+    "dangerMedium": "Medium",
+    "dangerHigh": "High",
+    "dangerCritical": "Critical"
+  },
+  "quiz": {
+    "pageTitle": "Cybersecurity Quizzes",
+    "pageSubtitle": "Test your skills, improve awareness, and learn to recognize real threats.",
+    "randomQuiz": "Random Quiz",
+    "dailyChallenge": "Daily Challenge",
+    "aiGeneratedQuiz": "AI Generated Quiz",
+    "loading": "Loading quiz questions...",
+    "popularTitle": "Popular Quizzes",
+    "startQuiz": "Start Quiz",
+    "playQuizAria": "Start quiz",
+    "questionsCount": "{{count}} questions",
+    "popularMeta": "{{questions}} questions • {{time}}",
+    "timeMin": "{{count}} min",
+    "difficulties": {
+      "beginner": "Beginner",
+      "medium": "Medium",
+      "advanced": "Advanced",
+      "mixed": "Mixed"
+    },
+    "categories": [
+      {
+        "title": "Phishing",
+        "description": "Fake emails, suspicious links, and social engineering."
+      },
+      {
+        "title": "Password Security",
+        "description": "Strong passwords, MFA, and credential leak defense."
+      },
+      {
+        "title": "Web Security",
+        "description": "Unsafe websites, browser attacks, and downloads."
+      },
+      {
+        "title": "Workplace Security",
+        "description": "Corporate threats, insider risk, and device safety."
+      },
+      {
+        "title": "AI & Modern Threats",
+        "description": "Deepfakes, AI scams, and modern phishing patterns."
+      },
+      {
+        "title": "Beginner / Advanced",
+        "description": "Adaptive starter and advanced challenge sets."
+      }
+    ],
+    "popular": [
+      { "title": "Phishing Detection" },
+      { "title": "Password Audit Sprint" },
+      { "title": "Browser Risk Radar" }
+    ],
+    "modal": {
+      "closeAria": "Close quiz",
+      "sessionTitle": "Quiz Session",
+      "questionProgress": "Question {{current}}/{{total}}",
+      "previous": "Previous",
+      "next": "Next",
+      "finishQuiz": "Finish Quiz",
+      "resultsTitle": "Results",
+      "scoreLine": "Score: {{score}}/{{total}} ({{percent}}%)",
+      "yourAnswer": "Your answer:",
+      "correctAnswer": "Correct answer:",
+      "noAnswerSelected": "No answer selected",
+      "unavailable": "Unavailable",
+      "restartQuiz": "Restart Quiz",
+      "close": "Close"
+    }
   }
 }

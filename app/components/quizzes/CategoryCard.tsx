@@ -5,11 +5,21 @@ import type { CategoryMeta } from "./quiz-metadata";
 
 type Props = {
   category: CategoryMeta;
+  difficultyLabel: string;
+  questionsLabel: string;
+  startQuizLabel: string;
   onStart: () => void;
   disabled?: boolean;
 };
 
-export function CategoryCard({ category, onStart, disabled }: Props) {
+export function CategoryCard({
+  category,
+  difficultyLabel,
+  questionsLabel,
+  startQuizLabel,
+  onStart,
+  disabled,
+}: Props) {
   return (
     <motion.article
       whileHover={{ y: -4 }}
@@ -20,7 +30,7 @@ export function CategoryCard({ category, onStart, disabled }: Props) {
         <span
           className={`rounded-full border px-2 py-0.5 text-xs ${difficultyBadgeClass(category.difficulty)}`}
         >
-          {category.difficulty}
+          {difficultyLabel}
         </span>
       </div>
 
@@ -28,7 +38,7 @@ export function CategoryCard({ category, onStart, disabled }: Props) {
       <p className="mt-2 text-sm text-zinc-400">{category.description}</p>
 
       <div className="mt-4 flex items-center justify-between text-xs text-zinc-400">
-        <span>{category.quizCount} quizzes</span>
+        <span>{questionsLabel}</span>
         <span>{category.estimatedTime}</span>
       </div>
 
@@ -37,7 +47,7 @@ export function CategoryCard({ category, onStart, disabled }: Props) {
         disabled={disabled}
         className="mt-4 w-full bg-zinc-800 text-zinc-100 hover:bg-zinc-700 disabled:opacity-55"
       >
-        Start Quiz
+        {startQuizLabel}
       </Button>
     </motion.article>
   );

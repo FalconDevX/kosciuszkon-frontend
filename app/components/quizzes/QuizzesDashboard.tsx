@@ -5,15 +5,23 @@ import { motion } from "framer-motion";
 import { Brain, Dice5, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/app/components/home/Navbar";
+import {
+  buildQuizSessionBestEffort,
+  DEFAULT_QUIZ_SESSION_QUESTIONS,
+} from "@/lib/quiz-limits";
+import { quizDifficultyLabel } from "@/lib/quiz-difficulty-label";
 import { quizApi } from "@/services/api/quiz-api";
 import { useQuizSession } from "@/hooks/useQuizSession";
 import type { Dictionary } from "@/i18n/types";
 import type { Locale } from "@/i18n/config";
 import type { QuizCategory } from "@/types/quiz";
+import type { QuizDifficulty } from "@/types/quiz";
 import { CategoryCard } from "./CategoryCard";
 import { QuizCard } from "./QuizCard";
 import { QuizModal } from "./QuizModal";
-import { categoryMetadata } from "./quiz-metadata";
+import { getQuizCategoryCards } from "./quiz-metadata";
+
+const POPULAR_DIFFICULTIES: QuizDifficulty[] = ["Medium", "Beginner", "Advanced"];
 
 type Props = {
   locale: Locale;
@@ -21,45 +29,41 @@ type Props = {
 };
 
 export function QuizzesDashboard({ locale, dictionary }: Props) {
-  const quiz = useQuizSession();
+  const q = dictionary.quiz;
+  const quizSession = useQuizSession();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const popularQuizzes = useMemo(
-    () => [
-      { title: "Phishing Detection", difficulty: "Medium" as const, questions: 15, estimatedTime: "8 min" },
-      {
-        title: "Password Audit Sprint",
-        difficulty: "Beginner" as const,
-        questions: 10,
-        estimatedTime: "6 min",
-      },
-      {
-        title: "Browser Risk Radar",
-        difficulty: "Advanced" as const,
-        questions: 18,
-        estimatedTime: "11 min",
-      },
-    ],
-    [],
-  );
+  const categoryCards = useMemo(() => getQuizCategoryCards(q), [q]);
 
-  const loadQuiz = async (category?: QuizCategory) => {
-    setError(null);
+  const popularQuizzes = useMemo(() => {
+    const questions = DEFAULT_QUIZ_SESSION_QUESTIONS;
+    const time = q.timeMin.replace("{{count}}", String(5));
+    return q.popular.map((item, index) => ({
+      title: item.title,
+      difficulty: POPULAR_DIFFICULTIES[index] ?? "Medium",
+      questions,
+      estimatedTime: time,
+      meta: q.popularMeta.replace("{{questions}}", String(questions)).replace("{{time}}", time),
+      difficultyLabel: quizDifficultyLabel(POPULAR_DIFFICULTIES[index] ?? "Medium", q),
+    }));
+  }, [q]);
+
+  const loadQuiz = async (
+    category?: QuizCategory,
+    questionCount: number = DEFAULT_QUIZ_SESSION_QUESTIONS,
+  ) => {
     setIsLoading(true);
     try {
-      const questions = category
+      const raw = category
         ? await quizApi.getCategoryQuiz(category)
         : await quizApi.getRandomQuiz();
 
-      if (!questions.length) {
-        setError("No quiz questions available for this selection.");
-        return;
+      const questions = buildQuizSessionBestEffort(raw, questionCount);
+      if (questions?.length) {
+        quizSession.start(questions);
       }
-
-      quiz.start(questions);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load quiz data.");
+    } catch {
+      /* ignore: no banner above quiz grid */
     } finally {
       setIsLoading(false);
     }
@@ -79,75 +83,83 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl border border-zinc-800/80 bg-zinc-900/55 p-6 backdrop-blur md:p-8"
           >
-            <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
-              Cybersecurity Quizzes
-            </h1>
-            <p className="mt-3 max-w-2xl text-zinc-300">
-              Test your skills, improve awareness, and learn to recognize real threats.
-            </p>
+            <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">{q.pageTitle}</h1>
+            <p className="mt-3 max-w-2xl text-zinc-300">{q.pageSubtitle}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button
-                onClick={() => loadQuiz()}
+                onClick={() =>
+                  loadQuiz(undefined, DEFAULT_QUIZ_SESSION_QUESTIONS)
+                }
                 disabled={isLoading}
                 className="bg-blue-500/85 text-zinc-100 hover:bg-blue-500"
               >
                 <Dice5 className="size-4" />
-                Random Quiz
+                {q.randomQuiz}
               </Button>
               <Button
-                onClick={() => loadQuiz("Phishing")}
+                onClick={() =>
+                  loadQuiz("Phishing", DEFAULT_QUIZ_SESSION_QUESTIONS)
+                }
                 disabled={isLoading}
                 variant="outline"
                 className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800"
               >
                 <Flame className="size-4" />
-                Daily Challenge
+                {q.dailyChallenge}
               </Button>
               <Button
-                onClick={() => loadQuiz("AI Threats")}
+                onClick={() =>
+                  loadQuiz("AI Threats", DEFAULT_QUIZ_SESSION_QUESTIONS)
+                }
                 disabled={isLoading}
                 variant="outline"
                 className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800"
               >
                 <Brain className="size-4" />
-                AI Generated Quiz
+                {q.aiGeneratedQuiz}
               </Button>
             </div>
           </motion.div>
 
           {isLoading ? (
             <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-sm text-zinc-300">
-              Loading quiz questions...
-            </div>
-          ) : null}
-          {error ? (
-            <div className="rounded-xl border border-zinc-700 bg-zinc-900/70 p-4 text-sm text-zinc-200">
-              {error}
+              {q.loading}
             </div>
           ) : null}
 
           <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-            {categoryMetadata.map((category) => (
+            {categoryCards.map((category) => (
               <CategoryCard
                 key={`${category.title}-${category.category}`}
                 category={category}
-                onStart={() => loadQuiz(category.category)}
+                difficultyLabel={quizDifficultyLabel(category.difficulty, q)}
+                questionsLabel={q.questionsCount.replace(
+                  "{{count}}",
+                  String(category.quizCount),
+                )}
+                startQuizLabel={q.startQuiz}
+                onStart={() =>
+                  loadQuiz(category.category, DEFAULT_QUIZ_SESSION_QUESTIONS)
+                }
                 disabled={isLoading}
               />
             ))}
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-xl font-semibold">Popular Quizzes</h2>
+            <h2 className="text-xl font-semibold">{q.popularTitle}</h2>
             <div className="space-y-3">
               {popularQuizzes.map((item) => (
                 <QuizCard
                   key={item.title}
                   title={item.title}
+                  metaLine={item.meta}
                   difficulty={item.difficulty}
-                  questions={item.questions}
-                  estimatedTime={item.estimatedTime}
-                  onPlay={() => loadQuiz()}
+                  difficultyLabel={item.difficultyLabel}
+                  playAriaLabel={q.playQuizAria}
+                  onPlay={() =>
+                    loadQuiz(undefined, DEFAULT_QUIZ_SESSION_QUESTIONS)
+                  }
                   disabled={isLoading}
                 />
               ))}
@@ -157,10 +169,11 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
       </section>
 
       <QuizModal
-        open={quiz.isOpen}
-        questions={quiz.questions}
-        onClose={quiz.close}
-        onRestart={quiz.restart}
+        open={quizSession.isOpen}
+        questions={quizSession.questions}
+        onClose={quizSession.close}
+        onRestart={quizSession.restart}
+        modal={q.modal}
       />
     </main>
   );
