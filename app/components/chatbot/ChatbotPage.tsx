@@ -131,14 +131,16 @@ export function ChatbotPage({ locale, dictionary }: Props) {
       <section className="px-4 py-6 md:px-8">
         <div className="mx-auto flex h-[calc(100vh-7rem)] w-full max-w-4xl flex-col rounded-2xl border border-zinc-800 bg-zinc-900/70">
           <div className="border-b border-zinc-800 px-5 py-4">
-            <h1 className="text-lg font-semibold">Chatbot AI</h1>
+            <h1 className="text-lg font-semibold">Chatbot - SafeClickAI</h1>
           </div>
 
           {!chatStarted ? (
             <div className="flex flex-1 items-center justify-center px-5">
               <div className="max-w-xl text-center">
                 <h2 className="text-2xl font-semibold text-zinc-100">
-                  {locale === "pl" ? "Witaj w Chatbot AI" : "Welcome to Chatbot AI"}
+                  {locale === "pl"
+                    ? "Witaj w Chatbot - SafeClickAI"
+                    : "Welcome to Chatbot - SafeClickAI"}
                 </h2>
                 <p className="mt-2 text-sm text-zinc-400">
                   {locale === "pl"
