@@ -1,6 +1,7 @@
 "use client";
 import { type ChangeEvent, FormEvent, type MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { Globe, MessageSquarePlus, Paperclip, Send, Trash2, X } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
 import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
@@ -333,8 +334,24 @@ export function ChatbotPage({ locale, dictionary }: Props) {
           </aside>
 
           <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-            <div className="border-b border-zinc-800 px-5 py-4">
-              <h1 className="text-lg font-semibold">Chatbot - SafeClickAI</h1>
+            <div className="flex items-center gap-3 border-b border-zinc-800 px-5 py-3">
+              <Image
+                src="/safe_click_dark_small.png"
+                alt=""
+                width={36}
+                height={36}
+                className="size-9 shrink-0 object-contain"
+              />
+              <Image
+                src="/safe_click_dark_title.png"
+                alt="SafeClick"
+                width={200}
+                height={48}
+                className="h-8 w-auto max-w-[min(14rem,calc(100%-5rem))] object-contain object-left"
+              />
+              <span className="ml-auto hidden shrink-0 text-xs font-medium uppercase tracking-wide text-zinc-500 sm:inline">
+                {dictionary.navbar.chatbotAi}
+              </span>
             </div>
 
             {!chatStarted ? (<div className="flex flex-1 items-center justify-center px-5">

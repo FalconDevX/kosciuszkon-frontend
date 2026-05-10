@@ -1,5 +1,6 @@
 "use client";
 import { FormEvent, useEffect, useId, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Bot, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,32 @@ export function HomeMiniChat({ locale, dictionary }: Props) {
     };
     return (<div className="pointer-events-none fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 md:bottom-8 md:right-8">
       {open ? (<div id={panelId} role="dialog" aria-label={h.miniChatTitle} className="pointer-events-auto w-[min(22rem,calc(100vw-2.5rem))] rounded-2xl border border-zinc-700/90 bg-zinc-900/95 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-md">
+          <div className="mb-3 flex items-center justify-between gap-2 border-b border-zinc-800/90 pb-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <Image
+                src="/safe_click_dark_small.png"
+                alt=""
+                width={32}
+                height={32}
+                className="size-8 shrink-0 object-contain"
+              />
+              <Image
+                src="/safe_click_dark_title.png"
+                alt="SafeClick"
+                width={160}
+                height={36}
+                className="h-7 w-auto max-w-[min(11rem,calc(100%-3rem))] object-contain object-left"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-zinc-600 bg-zinc-950 text-zinc-300 transition-colors hover:border-zinc-500 hover:bg-zinc-800 hover:text-zinc-50"
+              aria-label={h.miniChatClose}
+            >
+              <X className="size-4" aria-hidden />
+            </button>
+          </div>
           <div className="relative rounded-xl border border-zinc-600/80 bg-zinc-950/80 px-4 py-3 text-base leading-relaxed text-zinc-200 md:text-lg after:absolute after:left-1/2 after:top-full after:z-0 after:-ml-2 after:border-8 after:border-transparent after:border-t-zinc-950/80 after:content-['']">
             {h.miniChatBubble}
           </div>
@@ -47,9 +74,6 @@ export function HomeMiniChat({ locale, dictionary }: Props) {
               <span className="sr-only">{h.miniChatSend}</span>
             </Button>
           </form>
-          <button type="button" onClick={() => setOpen(false)} className="mt-2 w-full rounded-lg py-1.5 text-center text-xs text-zinc-500 transition-colors hover:bg-zinc-800/60 hover:text-zinc-300">
-            {h.miniChatClose}
-          </button>
         </div>) : null}
 
       <div className="pointer-events-auto flex flex-col items-center gap-1">
