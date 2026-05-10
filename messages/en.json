@@ -113,6 +113,56 @@
     "dangerHigh": "High",
     "dangerCritical": "Critical"
   },
+  "interactiveTests": {
+    "pageTitle": "Interactive tests",
+    "pageSubtitle": "Practice spotting real-world phishing patterns hands-on.",
+    "phishingSpot": {
+      "title": "Spot the spoof markers",
+      "subtitle": "Find seven spoof cues on this Bank of America look-alike email — click where each risk hides.",
+      "instructions": "Each correct tap matches one of the seven clues we teach (sender, branding, greeting, typos, urgency, link, sign-off). Wrong clicks show a hint.",
+      "progressLabel": "{{found}} of {{total}} found",
+      "feedbackTitle": "Feedback",
+      "alreadyFound": "You already found this clue.",
+      "miss": "That is not one of the seven spoof clues — try another area of the email.",
+      "complete": "You found every phishing indicator on this screenshot.",
+      "finish": "Finish",
+      "missedSectionTitle": "Spots you missed",
+      "missedSectionSubtitle": "Highlighted in amber on the image above.",
+      "reset": "Try again",
+      "imageAlt": "Screenshot of a phishing email pretending to be from Bank of America.",
+      "spotAriaLabel": "Suspected phishing clue {{n}}",
+      "spots": [
+        {
+          "title": "Fraudulent but similar domain name for sender",
+          "detail": "The From address uses ameribank7.com — a look-alike domain, not bankofamerica.com or another official bank host."
+        },
+        {
+          "title": "Incorrect branding",
+          "detail": "Look at the institution name beside the logo — generic icons and imperfect typography beside “Bank of America” deserve extra scrutiny."
+        },
+        {
+          "title": "Generic information",
+          "detail": "Dear account holder avoids using your real name — typical when scammers send one message to many recipients."
+        },
+        {
+          "title": "Spelling errors",
+          "detail": "divice instead of device is a typo legitimate banks rarely leave in automated security notices."
+        },
+        {
+          "title": "Sense of urgency",
+          "detail": "Claims such as four mystery transactions are meant to scare you into acting before you verify the alert."
+        },
+        {
+          "title": "Fake link",
+          "detail": "The password-reset URL points to ameribank7.com — an attacker-controlled site meant to steal credentials, not the bank's real domain."
+        },
+        {
+          "title": "Incorrect name",
+          "detail": "Bank America omits the word of compared with Bank of America used above — a subtle branding slip common in forgeries."
+        }
+      ]
+    }
+  },
   "quiz": {
     "pageTitle": "Cybersecurity Quizzes",
     "pageSubtitle": "Test your skills, improve awareness, and learn to recognize real threats.",
