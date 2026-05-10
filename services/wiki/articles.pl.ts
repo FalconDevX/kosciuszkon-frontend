@@ -120,7 +120,7 @@ export const wikiArticlesPl: WikiArticle[] = [
         category: "cloud-security",
         readingTime: "5 min czytania",
         dangerLevel: "Medium",
-        description: "Bezpieczeństwo chmury jest podzielone: dostawca zabezpiecza infrastrukturę, klient — tożsamości, dane i konfiguracje.",
+        description: "Bezpieczeństwo chmury jest podzielone: dostawca zabezpiecza infrastrukturę, klient - tożsamości, dane i konfiguracje.",
         howItWorks: [
             "Dostawca zabezpiecza warstwy fizyczne i środowiska",
             "Klient zabezpiecza IAM i dostęp do danych",
@@ -334,7 +334,7 @@ export const wikiArticlesPl: WikiArticle[] = [
     },
     {
         id: "xss-attack-overview",
-        title: "Cross-site scripting (XSS) — przegląd",
+        title: "Cross-site scripting (XSS) - przegląd",
         category: "web-security",
         readingTime: "7 min czytania",
         dangerLevel: "High",
@@ -360,7 +360,7 @@ export const wikiArticlesPl: WikiArticle[] = [
     },
     {
         id: "deepfakes-explained",
-        title: "Deepfake — wyjaśnienie",
+        title: "Deepfake - wyjaśnienie",
         category: "ai-threats",
         readingTime: "6 min czytania",
         dangerLevel: "High",

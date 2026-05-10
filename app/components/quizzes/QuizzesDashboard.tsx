@@ -1,6 +1,7 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 import { Brain, Dice5, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/app/components/home/Navbar";
@@ -13,6 +14,27 @@ import type { Dictionary } from "@/i18n/types";
 import type { Locale } from "@/i18n/config";
 import type { QuizCategory } from "@/types/quiz";
 import type { QuizDifficulty } from "@/types/quiz";
+
+const QUIZ_CATEGORY_VALUES: QuizCategory[] = [
+    "Phishing",
+    "Password Security",
+    "Web Security",
+    "Workplace Security",
+    "AI Threats",
+];
+
+function quizCategoryFromSearchParam(raw: string | null): QuizCategory | null {
+    if (!raw) {
+        return null;
+    }
+    try {
+        const decoded = decodeURIComponent(raw);
+        return QUIZ_CATEGORY_VALUES.includes(decoded as QuizCategory) ? decoded as QuizCategory : null;
+    }
+    catch {
+        return null;
+    }
+}
 import { CategoryCard } from "./CategoryCard";
 import { QuizCard } from "./QuizCard";
 import { QuizModal } from "./QuizModal";
@@ -24,9 +46,21 @@ type Props = {
 };
 export function QuizzesDashboard({ locale, dictionary }: Props) {
     const q = dictionary.quiz;
+    const searchParams = useSearchParams();
     const quizSession = useQuizSession();
     const [isLoading, setIsLoading] = useState(false);
     const categoryCards = useMemo(() => getQuizCategoryCards(q), [q]);
+    const categoryFromUrl = useMemo(() => quizCategoryFromSearchParam(searchParams.get("category")), [searchParams]);
+    useEffect(() => {
+        if (!categoryFromUrl) {
+            return;
+        }
+        const id = `quiz-cat-${encodeURIComponent(categoryFromUrl)}`;
+        const timer = window.setTimeout(() => {
+            document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 350);
+        return () => window.clearTimeout(timer);
+    }, [categoryFromUrl]);
     const popularQuizzes = useMemo(() => {
         const questions = DEFAULT_QUIZ_SESSION_QUESTIONS;
         const time = q.timeMin.replace("{{count}}", String(5));
@@ -73,11 +107,21 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
                 <Dice5 className="size-4"/>
                 {q.randomQuiz}
               </Button>
-              <Button onClick={() => loadQuiz("Phishing", DEFAULT_QUIZ_SESSION_QUESTIONS)} disabled={isLoading} variant="outline" className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800">
+              <Button
+                onClick={() => loadQuiz("Phishing", DEFAULT_QUIZ_SESSION_QUESTIONS)}
+                disabled={isLoading}
+                variant="outline"
+                className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:border-zinc-600 hover:bg-zinc-800! hover:text-zinc-50!"
+              >
                 <Flame className="size-4"/>
                 {q.dailyChallenge}
               </Button>
-              <Button onClick={() => loadQuiz("AI Threats", DEFAULT_QUIZ_SESSION_QUESTIONS)} disabled={isLoading} variant="outline" className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800">
+              <Button
+                onClick={() => loadQuiz("AI Threats", DEFAULT_QUIZ_SESSION_QUESTIONS)}
+                disabled={isLoading}
+                variant="outline"
+                className="border-zinc-700 bg-zinc-900 text-zinc-200 hover:border-zinc-600 hover:bg-zinc-800! hover:text-zinc-50!"
+              >
                 <Brain className="size-4"/>
                 {q.aiGeneratedQuiz}
               </Button>
@@ -89,7 +133,9 @@ export function QuizzesDashboard({ locale, dictionary }: Props) {
             </div>) : null}
 
           <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-            {categoryCards.map((category) => (<CategoryCard key={`${category.title}-${category.category}`} category={category} difficultyLabel={quizDifficultyLabel(category.difficulty, q)} questionsLabel={q.questionsCount.replace("{{count}}", String(category.quizCount))} startQuizLabel={q.startQuiz} onStart={() => loadQuiz(category.category, DEFAULT_QUIZ_SESSION_QUESTIONS)} disabled={isLoading}/>))}
+            {categoryCards.map((category) => (<div key={`${category.title}-${category.category}`} id={`quiz-cat-${encodeURIComponent(category.category)}`} className="scroll-mt-28">
+                <CategoryCard category={category} difficultyLabel={quizDifficultyLabel(category.difficulty, q)} questionsLabel={q.questionsCount.replace("{{count}}", String(category.quizCount))} startQuizLabel={q.startQuiz} onStart={() => loadQuiz(category.category, DEFAULT_QUIZ_SESSION_QUESTIONS)} disabled={isLoading}/>
+              </div>))}
           </div>
 
           <div className="space-y-3">

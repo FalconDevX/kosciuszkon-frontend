@@ -49,7 +49,7 @@
     "miniChatHint": "Try SafeClick AI",
     "loggedInPanelTag": "Workspace",
     "loggedInTitle": "You're signed in",
-    "loggedInSubtitle": "Pick up where you left off — your dashboard is ready.",
+    "loggedInSubtitle": "Pick up where you left off - your dashboard is ready.",
     "loggedInDashboardCta": "Open dashboard"
   },
   "dashboard": {
@@ -68,7 +68,7 @@
     "quizStats": {
       "sectionTitle": "Quiz progress",
       "emptyHint": "Complete a quiz to see your points and progress here.",
-      "emptyBrandLine": "SafeClick — Kościuszkon",
+      "emptyBrandLine": "SafeClick - Kościuszkon",
       "pointsChartTitle": "Points per session",
       "pointsChartSubtitle": "Correct answers in each of your recent attempts.",
       "progressChartTitle": "Total points over time",

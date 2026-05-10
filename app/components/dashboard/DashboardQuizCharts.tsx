@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import { TrendingUp } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
@@ -101,14 +100,9 @@ export function DashboardQuizCharts({ locale, dictionary }: Props) {
     if (!sessions.length) {
         return (<div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/50 p-6 backdrop-blur">
         <h3 className="text-base font-semibold text-zinc-100">{dictionary.sectionTitle}</h3>
-        <div className="mt-4 flex flex-col items-center gap-3 rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-4 py-6 text-center sm:flex-row sm:text-left">
-          <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-zinc-700 bg-black">
-            <Image src="/safe_click_dark_small.png" alt="" width={40} height={40} className="h-10 w-10 object-contain"/>
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-medium tracking-tight text-zinc-100">{dictionary.emptyBrandLine}</p>
-            <p className="mt-2 text-sm text-zinc-500">{dictionary.emptyHint}</p>
-          </div>
+        <div className="mt-4 rounded-xl border border-zinc-800/70 bg-zinc-950/60 px-4 py-6 text-center sm:text-left">
+          <p className="text-sm font-medium tracking-tight text-zinc-100">{dictionary.emptyBrandLine}</p>
+          <p className="mt-2 text-sm text-zinc-500">{dictionary.emptyHint}</p>
         </div>
       </div>);
     }

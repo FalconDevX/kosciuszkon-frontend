@@ -68,7 +68,7 @@
     "quizStats": {
       "sectionTitle": "Postępy w quizach",
       "emptyHint": "Ukończ quiz, żeby zobaczyć tu punkty i postęp.",
-      "emptyBrandLine": "SafeClick — Kościuszkon",
+      "emptyBrandLine": "SafeClick - Kościuszkon",
       "pointsChartTitle": "Punkty w sesji",
       "pointsChartSubtitle": "Poprawne odpowiedzi w ostatnich próbach.",
       "progressChartTitle": "Suma punktów w czasie",

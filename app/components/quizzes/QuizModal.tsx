@@ -116,7 +116,7 @@ export function QuizModal({ open, questions, onClose, onRestart, modal }: Props)
                 </div>
 
                 <div className="mt-6 flex items-center justify-between">
-                  <Button variant="outline" onClick={() => setCurrentIndex((q) => Math.max(0, q - 1))} disabled={currentIndex === 0} className="cursor-pointer border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800 hover:text-zinc-100">
+                  <Button variant="outline" onClick={() => setCurrentIndex((q) => Math.max(0, q - 1))} disabled={currentIndex === 0} className="cursor-pointer border-zinc-700 bg-zinc-900 text-zinc-200 hover:border-zinc-600 hover:bg-zinc-800! hover:text-zinc-50!">
                     {modal.previous}
                   </Button>
 
@@ -153,7 +153,7 @@ export function QuizModal({ open, questions, onClose, onRestart, modal }: Props)
                   <Button onClick={restart} className="cursor-pointer bg-blue-500/90 text-zinc-100 hover:bg-blue-500">
                     {modal.restartQuiz}
                   </Button>
-                  <Button variant="outline" onClick={onClose} className="cursor-pointer border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800 hover:text-zinc-100">
+                  <Button variant="outline" onClick={onClose} className="cursor-pointer border-zinc-700 bg-zinc-900 text-zinc-200 hover:border-zinc-600 hover:bg-zinc-800! hover:text-zinc-50!">
                     {modal.close}
                   </Button>
                 </div>

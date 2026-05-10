@@ -283,4 +283,18 @@
   html {
     @apply font-sans;
   }
+
+  a[href],
+  button:not(:disabled),
+  input[type="button"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="reset"]:not(:disabled),
+  label:where([for]),
+  summary {
+    cursor: pointer;
+  }
+
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
 }

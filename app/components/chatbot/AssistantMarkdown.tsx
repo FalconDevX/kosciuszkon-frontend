@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { type Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -48,9 +49,18 @@ const markdownComponents: Components = {
     li: ({ children }) => <li className="leading-relaxed [&>p]:mb-0">{children}</li>,
     blockquote: ({ children }) => (<blockquote className="my-2 border-l-2 border-zinc-600 pl-3 text-zinc-300 italic">{children}</blockquote>),
     hr: () => <hr className="my-3 border-zinc-700"/>,
-    a: ({ href, children }) => (<a href={href} className="text-blue-400 underline decoration-blue-400/40 underline-offset-2 hover:text-blue-300" target="_blank" rel="noopener noreferrer">
+    a: ({ href, children, ...props }) => {
+        const url = href ?? "";
+        const linkClass = "text-blue-400 underline decoration-blue-400/40 underline-offset-2 hover:text-blue-300";
+        if (url.startsWith("/") && !url.startsWith("//")) {
+            return (<Link href={url} className={linkClass} {...props}>
+          {children}
+        </Link>);
+        }
+        return (<a href={href} className={linkClass} target="_blank" rel="noopener noreferrer" {...props}>
       {children}
-    </a>),
+    </a>);
+    },
     h1: ({ children }) => (<h3 className="mt-3 mb-2 text-base font-semibold text-zinc-50 first:mt-0">{children}</h3>),
     h2: ({ children }) => (<h3 className="mt-3 mb-2 text-base font-semibold text-zinc-50 first:mt-0">{children}</h3>),
     h3: ({ children }) => (<h4 className="mt-2 mb-1 text-sm font-semibold text-zinc-50 first:mt-0">{children}</h4>),

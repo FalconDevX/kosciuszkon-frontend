@@ -16,14 +16,18 @@ export type PostAiChatOptions = {
     file?: File | null;
     history?: AiChatHistoryItem[];
     webSearch?: boolean;
+    locale?: string;
 };
 export async function postAiChat(message: string, options: PostAiChatOptions = {}): Promise<AIChatResponse> {
-    const { file, history = [], webSearch = false } = options;
+    const { file, history = [], webSearch = false, locale } = options;
     if (file) {
         const formData = new FormData();
         formData.set("message", message);
         formData.set("history", JSON.stringify(history));
         formData.set("file", file, file.name);
+        if (locale) {
+            formData.set("locale", locale);
+        }
         if (webSearch) {
             formData.set("web_search", "true");
         }
@@ -39,7 +43,12 @@ export async function postAiChat(message: string, options: PostAiChatOptions = {
     const response = await fetch(`${API_BASE_URL}/ai/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, history, web_search: webSearch }),
+        body: JSON.stringify({
+            message,
+            history,
+            web_search: webSearch,
+            ...(locale ? { locale } : {}),
+        }),
     });
     if (!response.ok) {
         throw new Error(await getApiErrorMessage(response));

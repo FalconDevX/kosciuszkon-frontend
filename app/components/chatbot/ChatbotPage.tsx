@@ -124,6 +124,7 @@ export function ChatbotPage({ locale, dictionary }: Props) {
                 file,
                 history,
                 webSearch: useWebSearch,
+                locale,
             });
             setMessages((prev) => prev.map((m) => m.id === assistantId
                 ? { ...m, content: reply, model, sources, searchingWeb: false }
