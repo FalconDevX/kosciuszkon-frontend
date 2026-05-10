@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, ClipboardList, Settings } from "lucide-react";
+import { ArrowRight, BookOpen, Settings } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
 import { getStoredUserId } from "@/lib/auth-storage";
 import { DASHBOARD_RECOMMENDED_WIKI_IDS } from "@/lib/dashboard-recommended-articles";
@@ -13,6 +14,8 @@ import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import type { WikiArticle } from "@/types/wiki";
 import { QUIZ_CATEGORY_COUNT } from "@/app/components/quizzes/quiz-metadata";
+import { DashboardQuizCharts } from "@/app/components/dashboard/DashboardQuizCharts";
+import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
 import { getWikiArticles } from "@/services/wikiApi";
 
 type Props = {
@@ -52,14 +55,15 @@ export function Dashboard({ locale, dictionary }: Props) {
     .replace("{{minutes}}", String(DEFAULT_QUIZ_SESSION_QUESTIONS));
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
+    <main className="relative min-h-screen bg-zinc-950 text-zinc-100">
       <Navbar locale={locale} dictionary={dictionary} />
 
       <section className="relative overflow-hidden px-4 pb-10 pt-6 md:px-6">
         <div className="pointer-events-none absolute inset-0 bg-zinc-950" />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(161,161,170,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(161,161,170,0.18)_1px,transparent_1px)] bg-size-[28px_28px] opacity-[0.12]" />
+        <FallingStarsBackground />
 
-        <div className="relative mx-auto w-full max-w-[1100px] space-y-8">
+        <div className="relative z-10 mx-auto w-full max-w-[1100px] space-y-8">
           <motion.header
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -89,29 +93,45 @@ export function Dashboard({ locale, dictionary }: Props) {
           </motion.header>
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <motion.section
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05 }}
-              className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 backdrop-blur"
-            >
-              <div className="flex items-start gap-4">
-                <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-950">
-                  <ClipboardList className="size-5 text-blue-400" aria-hidden />
+            <div className="space-y-6">
+              <motion.section
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
+                className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 backdrop-blur"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-700 bg-zinc-950">
+                    <Image
+                      src="/safe_click_dark_small.png"
+                      alt="SafeClick shield logo"
+                      width={36}
+                      height={36}
+                      className="h-9 w-9 object-contain"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1 space-y-3">
+                    <h2 className="text-lg font-semibold text-zinc-100">{d.quizCardTitle}</h2>
+                    <p className="text-sm leading-relaxed text-zinc-400">{quizBody}</p>
+                    <Link
+                      href={`/${locale}/quiz`}
+                      className="mt-2 inline-flex h-10 items-center gap-2 rounded-lg bg-blue-500 px-4 text-sm font-medium text-zinc-950 transition-colors hover:bg-blue-400"
+                    >
+                      {d.quizCta}
+                      <ArrowRight className="size-4" aria-hidden />
+                    </Link>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1 space-y-3">
-                  <h2 className="text-lg font-semibold text-zinc-100">{d.quizCardTitle}</h2>
-                  <p className="text-sm leading-relaxed text-zinc-400">{quizBody}</p>
-                  <Link
-                    href={`/${locale}/quiz`}
-                    className="mt-2 inline-flex h-10 items-center gap-2 rounded-lg bg-blue-500 px-4 text-sm font-medium text-zinc-950 transition-colors hover:bg-blue-400"
-                  >
-                    {d.quizCta}
-                    <ArrowRight className="size-4" aria-hidden />
-                  </Link>
-                </div>
-              </div>
-            </motion.section>
+              </motion.section>
+
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.08 }}
+              >
+                <DashboardQuizCharts locale={locale} dictionary={d.quizStats} />
+              </motion.div>
+            </div>
 
             <motion.section
               initial={{ opacity: 0, y: 14 }}

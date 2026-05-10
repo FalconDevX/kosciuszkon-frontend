@@ -1,13 +1,14 @@
 "use client";
 
 import { type ChangeEvent, FormEvent, useRef, useState } from "react";
-import { Paperclip, Send, X } from "lucide-react";
+import { Globe, Paperclip, Send, X } from "lucide-react";
 import { Navbar } from "@/app/components/home/Navbar";
+import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
 import { AssistantMarkdown } from "@/app/components/chatbot/AssistantMarkdown";
 import { Button } from "@/components/ui/button";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
-import { postAiChat } from "@/services/api/ai-chat-api";
+import { postAiChat, type AIChatSource } from "@/services/api/ai-chat-api";
 
 type Props = {
   locale: Locale;
@@ -20,26 +21,47 @@ type Message = {
   content: string;
   fileName?: string;
   model?: string;
+  sources?: AIChatSource[];
+  searchingWeb?: boolean;
 };
 
-function AssistantTyping() {
+function AssistantTyping({ searchingWeb, locale }: { searchingWeb?: boolean; locale: Locale }) {
   return (
-    <span className="inline-flex items-center gap-1 py-0.5" aria-live="polite">
-      {[0, 150, 300].map((delay) => (
-        <span
-          key={delay}
-          className="size-1.5 animate-bounce rounded-full bg-zinc-400"
-          style={{ animationDelay: `${delay}ms` }}
-        />
-      ))}
+    <span className="inline-flex items-center gap-2 py-0.5" aria-live="polite">
+      {searchingWeb ? (
+        <>
+          <Globe className="size-3.5 shrink-0 animate-pulse text-blue-300" aria-hidden />
+          <span className="text-xs text-zinc-400">
+            {locale === "pl" ? "Szukam w sieci..." : "Searching the web..."}
+          </span>
+        </>
+      ) : null}
+      <span className="inline-flex items-center gap-1">
+        {[0, 150, 300].map((delay) => (
+          <span
+            key={delay}
+            className="size-1.5 animate-bounce rounded-full bg-zinc-400"
+            style={{ animationDelay: `${delay}ms` }}
+          />
+        ))}
+      </span>
     </span>
   );
+}
+
+function getHostname(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
 }
 
 export function ChatbotPage({ locale, dictionary }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [prompt, setPrompt] = useState("");
   const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [webSearchEnabled, setWebSearchEnabled] = useState(false);
   const [chatStarted, setChatStarted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSending, setIsSending] = useState(false);
@@ -49,6 +71,8 @@ export function ChatbotPage({ locale, dictionary }: Props) {
     const text = prompt.trim();
     const file = pendingFile;
     if (!text && !file) return;
+
+    const useWebSearch = webSearchEnabled;
 
     const userId = Date.now();
     const assistantId = userId + 1;
@@ -64,6 +88,7 @@ export function ChatbotPage({ locale, dictionary }: Props) {
       id: assistantId,
       role: "assistant",
       content: "",
+      searchingWeb: useWebSearch,
     };
 
     setChatStarted(true);
@@ -99,17 +124,24 @@ export function ChatbotPage({ locale, dictionary }: Props) {
         )
         .map((m) => ({ role: m.role, content: m.content }));
 
-      const { response: reply, model } = await postAiChat(messageForModel, {
+      const { response: reply, model, sources } = await postAiChat(messageForModel, {
         file,
         history,
+        webSearch: useWebSearch,
       });
       setMessages((prev) =>
-        prev.map((m) => (m.id === assistantId ? { ...m, content: reply, model } : m)),
+        prev.map((m) =>
+          m.id === assistantId
+            ? { ...m, content: reply, model, sources, searchingWeb: false }
+            : m,
+        ),
       );
     } catch (error) {
       const detail = error instanceof Error ? error.message : networkError;
       setMessages((prev) =>
-        prev.map((m) => (m.id === assistantId ? { ...m, content: detail } : m)),
+        prev.map((m) =>
+          m.id === assistantId ? { ...m, content: detail, searchingWeb: false } : m,
+        ),
       );
     } finally {
       setIsSending(false);
@@ -125,10 +157,11 @@ export function ChatbotPage({ locale, dictionary }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
+    <main className="relative min-h-screen bg-zinc-950 text-zinc-100">
+      <FallingStarsBackground />
       <Navbar locale={locale} dictionary={dictionary} />
 
-      <section className="px-4 py-6 md:px-8">
+      <section className="relative z-10 px-4 py-6 md:px-8">
         <div className="mx-auto flex h-[calc(100vh-7rem)] w-full max-w-4xl flex-col rounded-2xl border border-zinc-800 bg-zinc-900/70">
           <div className="border-b border-zinc-800 px-5 py-4">
             <h1 className="text-lg font-semibold">Chatbot - SafeClickAI</h1>
@@ -167,13 +200,42 @@ export function ChatbotPage({ locale, dictionary }: Props) {
                     </div>
                   ) : null}
                   {message.role === "assistant" && message.content === "" ? (
-                    <AssistantTyping />
+                    <AssistantTyping
+                      searchingWeb={message.searchingWeb}
+                      locale={locale}
+                    />
                   ) : message.content ? (
                     message.role === "assistant" ? (
                       <AssistantMarkdown content={message.content} />
                     ) : (
                       <div className="whitespace-pre-wrap">{message.content}</div>
                     )
+                  ) : null}
+                  {message.role === "assistant" && message.sources && message.sources.length > 0 ? (
+                    <div className="mt-2 border-t border-zinc-700/80 pt-2">
+                      <div className="mb-1 flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-zinc-500">
+                        <Globe className="size-3 shrink-0" aria-hidden />
+                        {locale === "pl" ? "Źródła" : "Sources"}
+                      </div>
+                      <ul className="flex flex-col gap-0.5 text-[11px]">
+                        {message.sources.map((s, i) => (
+                          <li key={`${message.id}-src-${i}`} className="truncate">
+                            <a
+                              href={s.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:underline"
+                              title={s.url}
+                            >
+                              {s.title || getHostname(s.url)}
+                            </a>
+                            <span className="ml-1 text-zinc-500">
+                              ({getHostname(s.url)})
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ) : null}
                   {message.model ? (
                     <div className="mt-2 border-t border-zinc-700/80 pt-2 text-[11px] text-zinc-500">
@@ -224,6 +286,38 @@ export function ChatbotPage({ locale, dictionary }: Props) {
                 onClick={() => fileInputRef.current?.click()}
               >
                 <Paperclip className="size-4 text-white" />
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                aria-pressed={webSearchEnabled}
+                aria-label={
+                  locale === "pl"
+                    ? webSearchEnabled
+                      ? "Wyszukiwanie w sieci włączone"
+                      : "Włącz wyszukiwanie w sieci"
+                    : webSearchEnabled
+                      ? "Web search enabled"
+                      : "Enable web search"
+                }
+                title={
+                  locale === "pl"
+                    ? webSearchEnabled
+                      ? "Wyszukiwanie w sieci: WŁ"
+                      : "Wyszukiwanie w sieci: WYŁ"
+                    : webSearchEnabled
+                      ? "Web search: ON"
+                      : "Web search: OFF"
+                }
+                onClick={() => setWebSearchEnabled((v) => !v)}
+                className={`h-11 w-11 shrink-0 cursor-pointer border-zinc-700 ${
+                  webSearchEnabled
+                    ? "bg-blue-500/20 text-blue-200 hover:bg-blue-500/25 [&_svg]:text-blue-200"
+                    : "bg-zinc-950 text-white hover:bg-zinc-900 hover:text-white [&_svg]:text-white"
+                }`}
+              >
+                <Globe className="size-4" />
               </Button>
               <input
                 value={prompt}

@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Dictionary } from "@/i18n/types";
 import type { QuizQuestion } from "@/types/quiz";
+import { appendQuizSessionRecord } from "@/lib/quiz-stats-storage";
+import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
 
 type ModalCopy = Dictionary["quiz"]["modal"];
 
@@ -21,6 +23,12 @@ export function QuizModal({ open, questions, onClose, onRestart, modal }: Props)
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showResults, setShowResults] = useState(false);
+  const savedStatsForSessionRef = useRef(false);
+
+  const sessionFingerprint = useMemo(
+    () => questions.map((q) => q.id).join(","),
+    [questions],
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -32,11 +40,19 @@ export function QuizModal({ open, questions, onClose, onRestart, modal }: Props)
   }, [open, onClose]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      savedStatsForSessionRef.current = false;
+      return;
+    }
     setCurrentIndex(0);
     setAnswers({});
     setShowResults(false);
+    savedStatsForSessionRef.current = false;
   }, [open]);
+
+  useEffect(() => {
+    savedStatsForSessionRef.current = false;
+  }, [sessionFingerprint]);
 
   const current = questions[currentIndex];
   const progress = questions.length ? ((currentIndex + 1) / questions.length) * 100 : 0;
@@ -50,12 +66,24 @@ export function QuizModal({ open, questions, onClose, onRestart, modal }: Props)
 
   const percentage = questions.length ? Math.round((score / questions.length) * 100) : 0;
 
+  useEffect(() => {
+    if (!open || !showResults || !questions.length) return;
+    if (savedStatsForSessionRef.current) return;
+    savedStatsForSessionRef.current = true;
+    appendQuizSessionRecord({
+      score,
+      total: questions.length,
+      percent: percentage,
+    });
+  }, [open, showResults, questions.length, score, percentage]);
+
   const isLast = currentIndex === questions.length - 1;
 
   const restart = () => {
     setCurrentIndex(0);
     setAnswers({});
     setShowResults(false);
+    savedStatsForSessionRef.current = false;
     onRestart();
   };
 
@@ -77,11 +105,12 @@ export function QuizModal({ open, questions, onClose, onRestart, modal }: Props)
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
         >
+          <FallingStarsBackground density="sparse" className="z-0" />
           <motion.div
             initial={{ scale: 0.96, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.98, opacity: 0 }}
-            className="relative w-full max-w-2xl rounded-2xl border border-zinc-800 bg-zinc-900 p-6"
+            className="relative z-10 w-full max-w-2xl rounded-2xl border border-zinc-800 bg-zinc-900 p-6"
           >
             <button
               type="button"

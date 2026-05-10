@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/app/components/home/Navbar";
+import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
 import { WikiArticleList } from "@/app/components/wiki/WikiArticleList";
 import { WikiArticleView } from "@/app/components/wiki/WikiArticleView";
 import { WikiSearch } from "@/app/components/wiki/WikiSearch";
@@ -49,14 +50,15 @@ export function CyberWikiDashboard({ locale, dictionary }: Props) {
   }, [articleFromUrl, filteredArticles, setSelectedArticleId]);
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
+    <main className="relative min-h-screen bg-zinc-950 text-zinc-100">
       <Navbar locale={locale} dictionary={dictionary} />
 
       <section className="relative overflow-hidden px-4 pb-8 pt-6 md:px-6">
         <div className="pointer-events-none absolute inset-0 bg-zinc-950" />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(161,161,170,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(161,161,170,0.18)_1px,transparent_1px)] bg-size-[28px_28px] opacity-[0.12]" />
+        <FallingStarsBackground />
 
-        <div className="relative mx-auto w-full max-w-[1450px] space-y-5">
+        <div className="relative z-10 mx-auto w-full max-w-[1450px] space-y-5">
           <motion.header
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
