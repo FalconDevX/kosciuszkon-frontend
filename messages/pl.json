@@ -113,6 +113,56 @@
     "dangerHigh": "Wysokie",
     "dangerCritical": "Krytyczne"
   },
+  "interactiveTests": {
+    "pageTitle": "Testy interaktywne",
+    "pageSubtitle": "Ćwicz wykrywanie phishingu w praktyce.",
+    "phishingSpot": {
+      "title": "Wskaż oznaczenia spoofingu",
+      "subtitle": "Znajdź siedem sygnałów spoofingu na mailu udającym Bank of America — kliknij miejsce każdego ryzyka.",
+      "instructions": "Każdy poprawny klik odpowiada jednemu z siedmiu typowych błędów (nadawca, branding, powitanie, literówki, pilność, link, podpis). Poza nimi dostaniesz podpowiedź.",
+      "progressLabel": "Znaleziono {{found}} z {{total}}",
+      "feedbackTitle": "Informacja zwrotna",
+      "alreadyFound": "To oznaczenie już znalazłeś.",
+      "miss": "To nie jest jedno z siedmiu szukanych miejsc — spróbuj innego obszaru maila.",
+      "complete": "Znalazłeś wszystkie wskaźniki phishingu na tym zrzucie.",
+      "finish": "Zakończ",
+      "missedSectionTitle": "Miejsca, które przegapiłeś",
+      "missedSectionSubtitle": "Zaznaczone na obrazku na pomarańczowo.",
+      "reset": "Spróbuj ponownie",
+      "imageAlt": "Zrzut ekranu fałszywego maila podszywającego się pod Bank of America.",
+      "spotAriaLabel": "Podejrzane miejsce {{n}}",
+      "spots": [
+        {
+          "title": "Fałszywa, lecz podobna domena nadawcy",
+          "detail": "Adres Nadawcy używa ameribank7.com — podszywającej domeny, a nie oficjalnego hosta banku (np. bankofamerica.com)."
+        },
+        {
+          "title": "Nieprawidłowy branding",
+          "detail": "Zwróć uwagę na nazwę instytucji obok logo — generyczne ikony i niedoskonała typografia przy „Bank of America” wymagają dodatkowej weryfikacji."
+        },
+        {
+          "title": "Ogólne informacje",
+          "detail": "„Szanowny posiadaczu konta” bez Twojego imienia typowe przy masowej wysyłce do wielu osób."
+        },
+        {
+          "title": "Błędy ortograficzne",
+          "detail": "„divice” zamiast „device” — literówki rzadkie w dopracowanych, automatycznych alertach bezpieczeństwa banku."
+        },
+        {
+          "title": "Poczucie pilności",
+          "detail": "Informacje o „czterech nowych transakcjach” mają wywołać strach i działanie w pośpiechu zamiast spokojnej weryfikacji."
+        },
+        {
+          "title": "Fałszywy link",
+          "detail": "URL resetu hasła prowadzi na ameribank7.com — stronę kontrolowaną przez oszusta w celu kradzieży danych logowania, a nie na prawdziwą domenę banku."
+        },
+        {
+          "title": "Nieprawidłowa nazwa",
+          "detail": "„Bank America” bez „of” w porównaniu z „Bank of America” wyżej — subtelny błąd marki częsty w podrobionych wiadomościach."
+        }
+      ]
+    }
+  },
   "quiz": {
     "pageTitle": "Quizy z cyberbezpieczeństwa",
     "pageSubtitle": "Sprawdź swoje umiejętności, podnieś świadomość i ucz się rozpoznawać realne zagrożenia.",
