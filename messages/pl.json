@@ -50,7 +50,17 @@
     "recommendedSubtitle": "Wybrane tematy do lektury w Kluczowych pojęciach.",
     "readArticle": "Czytaj artykuł",
     "greetingHello": "Witaj,",
-    "settings": "Ustawienia"
+    "settings": "Ustawienia",
+    "quizStats": {
+      "sectionTitle": "Postępy w quizach",
+      "emptyHint": "Ukończ quiz, żeby zobaczyć tu punkty i postęp.",
+      "goToQuizzes": "Przejdź do quizów",
+      "pointsChartTitle": "Punkty w sesji",
+      "pointsChartSubtitle": "Poprawne odpowiedzi w ostatnich próbach.",
+      "progressChartTitle": "Suma punktów w czasie",
+      "progressChartSubtitle": "Narastająca suma punktów z ukończonych sesji.",
+      "lastSessionAccuracy": "Ostatni quiz: {{percent}}%"
+    }
   },
   "settings": {
     "title": "Ustawienia",

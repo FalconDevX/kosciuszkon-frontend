@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { AuthPanel } from "@/app/components/auth/AuthPanel";
+import { FallingStarsBackground } from "@/app/components/effects/FallingStarsBackground";
 import { Navbar } from "./Navbar";
 import type { Dictionary } from "@/i18n/types";
 import type { Locale } from "@/i18n/config";
@@ -61,11 +62,12 @@ export function Home({ locale, dictionary }: HomeProps) {
   })();
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
+    <main className="relative min-h-screen bg-zinc-950 text-zinc-100">
       <Navbar locale={locale} dictionary={dictionary} />
       <section className="relative h-[calc(100vh-4rem)] overflow-hidden px-6 py-6 md:px-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_48%,rgba(59,130,246,0.16),transparent_32%)]" />
-        <div className="mt-4 flex w-full items-center justify-center md:mt-6">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_48%,rgba(59,130,246,0.16),transparent_32%)]" />
+        <FallingStarsBackground />
+        <div className="relative z-10 mt-4 flex w-full items-center justify-center md:mt-6">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -78,7 +80,7 @@ export function Home({ locale, dictionary }: HomeProps) {
             ) : null}
           </motion.h1>
         </div>
-        <div className="relative mx-auto flex h-[calc(100vh-10rem)] w-full max-w-[1280px] flex-col items-start justify-center gap-4 lg:-translate-y-10 lg:flex-row lg:items-center xl:gap-8">
+        <div className="relative z-10 mx-auto flex h-[calc(100vh-10rem)] w-full max-w-[1280px] flex-col items-start justify-center gap-4 lg:-translate-y-10 lg:flex-row lg:items-center xl:gap-8">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}

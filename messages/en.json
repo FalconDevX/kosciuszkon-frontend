@@ -50,7 +50,17 @@
     "recommendedSubtitle": "Hand-picked topics to read next in Key Concepts.",
     "readArticle": "Read article",
     "greetingHello": "Hello,",
-    "settings": "Settings"
+    "settings": "Settings",
+    "quizStats": {
+      "sectionTitle": "Quiz progress",
+      "emptyHint": "Complete a quiz to see your points and progress here.",
+      "goToQuizzes": "Go to quizzes",
+      "pointsChartTitle": "Points per session",
+      "pointsChartSubtitle": "Correct answers in each of your recent attempts.",
+      "progressChartTitle": "Total points over time",
+      "progressChartSubtitle": "Running sum of points from completed sessions.",
+      "lastSessionAccuracy": "Last quiz: {{percent}}%"
+    }
   },
   "settings": {
     "title": "Settings",

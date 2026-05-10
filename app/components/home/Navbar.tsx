@@ -28,7 +28,7 @@ export function Navbar({ locale, dictionary }: NavbarProps) {
   ];
 
   return (
-    <header className="flex h-16 w-full items-center justify-between border-b border-zinc-800/90 bg-zinc-900/70 px-8 backdrop-blur">
+    <header className="relative z-10 flex h-16 w-full items-center justify-between border-b border-zinc-800/90 bg-zinc-900/70 px-8 backdrop-blur">
       <Link href={`/${locale}`} className="flex items-center gap-3">
         <Image
           src="/safe_click_dark_small.png"
