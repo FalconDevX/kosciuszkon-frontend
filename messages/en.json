@@ -81,7 +81,18 @@
   "settings": {
     "title": "Settings",
     "subtitle": "Manage your account and preferences here. More options coming soon.",
-    "backToDashboard": "Back to dashboard"
+    "backToDashboard": "Back to dashboard",
+    "accountSectionTitle": "Account",
+    "accountEmailLabel": "Email",
+    "accountEmailHint": "Your sign-in email will appear here when available.",
+    "accountEmailInputPlaceholder": "Not connected",
+    "preferencesSectionTitle": "Preferences",
+    "languageSettingLabel": "Language",
+    "languageSettingHint": "Change language from the header menu.",
+    "languageSettingPlaceholder": "Use header switcher",
+    "notificationsLabel": "Notifications",
+    "notificationsHint": "Choose what we email you about.",
+    "notificationsPlaceholder": "Coming soon"
   },
   "wiki": {
     "pageTitle": "Cybersecurity Wiki",

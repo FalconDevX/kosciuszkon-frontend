@@ -81,7 +81,18 @@
   "settings": {
     "title": "Ustawienia",
     "subtitle": "Zarządzaj kontem i preferencjami. Więcej opcji wkrótce.",
-    "backToDashboard": "Wróć do panelu"
+    "backToDashboard": "Wróć do panelu",
+    "accountSectionTitle": "Konto",
+    "accountEmailLabel": "E-mail",
+    "accountEmailHint": "E-mail logowania pojawi się tutaj, gdy będzie dostępny.",
+    "accountEmailInputPlaceholder": "Brak połączenia",
+    "preferencesSectionTitle": "Preferencje",
+    "languageSettingLabel": "Język",
+    "languageSettingHint": "Zmień język w menu w nagłówku.",
+    "languageSettingPlaceholder": "Przełącznik w nagłówku",
+    "notificationsLabel": "Powiadomienia",
+    "notificationsHint": "Wybierz, na jakie maile chcesz otrzymywać informacje.",
+    "notificationsPlaceholder": "Wkrótce"
   },
   "wiki": {
     "pageTitle": "Wiki cyberbezpieczeństwa",
